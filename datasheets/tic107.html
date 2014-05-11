@@ -1,0 +1,466 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>caxapa.ru :: Что-то вроде application note еще не оформлено, но в теле сообщения пример, который поможет.</title>
+<base href="http://caxapa.ru">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta name="google-site-verification" content="0oRGjgy_EdvcYVe0z7kBi1NzhptdLsjjJikpjLlUZBs" />
+<meta name="Description" content="Российская электроника : cообщество профессионалов caxapa.ru : caxapa.ru :: Что-то вроде application note еще не оформлено, но в теле сообщения пример, который поможет." >
+<meta name="Keywords" content="caxapa.ru :: Что-то вроде application note еще не оформлено, но в теле сообщения пример, который поможет. схемы, микроконтроллеры, решения, iar, keil, avr, pic, arm, cortex, stellaris, msp430" >
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<link rel="shortcut icon" href="/favicon.ico">
+<style>/* generic.css */
+body,div,center,pre,p,ul,li,h1,h2,h3,h4,h5,h6,form,textarea,iframe,table,tr,td,a{border-style:none; padding:0; margin:0; background-repeat:no-repeate; background-color:transparent}
+textarea{background-color:#fff}
+a{cursor:pointer;text-decoration:underline}
+a:hover{text-decoration:underline}
+fieldset,img,a img{border-style:none}
+td,th{vertical-align:top; text-align:left}
+table,td,th{border-collapse:collapse}
+h1,h2,h3,h4,h5,h6{font-size:1em; font-weight:normal}
+br,hr{clear:both}
+sub,sup{font-size:0.7em; font-weight:bold}
+
+h1{font-size:120%; margin:0.7em 0em 0em 0em; padding:0px; float:left;}
+h2,h3 {margin:2px;font-size:17px;font-family:serif,sans serif}
+h3 {font-weight:bold;text-align:center;}
+
+ul {list-style-position:outside; margin:0px; padding:0em 0em 0em 1.7em; line-height:1.25em}
+
+#the {font:bold 11px tahoma;color:#aaa;}
+#the a{font:normal 12px tahoma; color:black; text-decoration:none; padding:0; margin:0 0.2em 0 0.4em}
+#the a:hover {text-decoration:underline;}
+
+#hdr table td {vertical-align:top;}
+#hdr,#hdr table td,#hdr p a{font:normal xx-small verdana, arial;}
+#hdr h1 {clear:both; width:100%;text-align:center;padding:0;margin:0} 
+#hdr h1 a{font:italic 19px georgia,times; color:#000; text-decoration:none;} 
+#hdr p {clear:both; margin:0; padding:0;background:transparent;}
+#hdr p a {text-decoration:none;cursor:pointer;padding:0 0.1em;color:#777} 
+#hdr p a:hover {background-color:#00A;color:#fff} 
+#hdr p a.a1 {color:#000;background-color:#ddd};
+
+span.hilite {font-weight:bold;background-color:yellow;padding:0}
+
+table#news {width:200px; font:normal xx-small tahoma,verdana,arial; clear: both; float: right; 
+	background:#e7e7d0; border-left: 1px solid #fff; border-bottom: 1px solid #ccc; margin: 0px 0px 1px 4px; } 
+table#news #hronos img {float:none;display:block}
+table#news #hronos a {text-decoration:none;display:table;margin:0 auto;margin-top:1em}
+table#news a.cap:hover, table#news #hronos a:hover {text-decoration:underline}
+table#news img {float:left; margin:0 0.7em 0.3em 0;display:table;}
+table#news div {clear:both}
+table#news div.rss {padding:0.7em 0}
+table#news a.cap {display:block; font:bold xx-small verdana,tahoma; color:#307; text-decoration:none;
+	margin-bottom:7px;text-align:right;border-bottom:1px solid #abc; padding-bottom:7px;}
+
+.n {font-weight:bold;text-decoration:none;white-space:nowrap}
+a.n{font-weight:bold;text-decoration:underline;cursor:pointer;}
+
+#topics {margin:0px;padding:0px; background:#fff}
+#topics .date {white-space:nowrap}
+#topics span.small {padding:0em 7px}
+#topics span.small,#topics span.small a {font:normal xx-small tahoma,arial;}
+#topics ul.root {padding:0.7em 0em 0.7em 3em;border-bottom:solid 1px #eef;}
+#topics.arc, #topics ul.arc {border-left:solid 7px #883D91} 
+#topics li {list-style-type:none} 
+#topics img.expand, #topics img.collapse {margin: 0 0.7em 0 -0.7em; width:10px; height:10px;}
+#topics strong {text-decoration:none; white-space:nowrap}
+#topics strong.a {background-color:#fd0; padding:0px 3px}
+#topics strong.m, #msg strong.m {padding-left:19px; background-image:url(http://caxapa.ru/images/star.png); background-repeat:no-repeat; background-color:transparent}
+#topics strong.z , #msg strong.z{color:#c0a}
+#topics li a.ip {font-weight:bold}
+#topics li.root {clear:left}
+#topics li a.leech {font-weight:bold; text-decoration:none; cursor:pointer; color:#000;}
+#topics li a.leech:hover {color:#fff; background:#008}
+#topics .nw {color:#FFF; background:#00AC82; font:italic 70% tahoma,verdana;
+	display:inline;text-decoration:none;padding:1px 5px;}
+#topics li table.msg {background:#eed;margin-right:1em;}
+
+#cpanel,#bpanel{background-image:url(/images/metal.gif);background-color:#EEEBE6;}
+#cpanel {border-top:outset 1px; border-bottom:ridge 2px;width:100%; white-space:nowrap}
+#cpanel td{vertical-align:bottom; padding:0px 3px 3px 3px; border-top:solid 1px #FFFFFF; white-space:nowrap}
+#cpanel a{color:#000; font:bold 10px tahoma,arial; margin:1px 8px 0px 2px;cursor:pointer}
+#cpanel a:hover{color:#00C;}
+#cpanel .nw {color:#FFF;background:url(/images/tb_mail.png) no-repeat #00AC82;padding-left:18px}
+
+#bpanel {text-align:center; padding:2px 12px;}
+#bpanel a{font:bold small "Trebuchet MS",tahoma; color:#000}
+
+.pager, .pager a{font:normal xx-small tahoma}
+.pager a{color:#666;padding:0 3px 1px 3px;margin:0 2px}
+.pager a b{color:red}
+.pager a.red{text-decoration:none;color:#fff;background:red;}</style>
+<link rel="stylesheet" type="text/css" href="/css/msg.css" >
+<link rel="stylesheet" type="text/css" href="/css/options.css">
+<link rel="stylesheet" type="text/css" href="/highlight/highlight.css" ><script type="text/javascript" src="/js/script.js"></script>
+<script type="text/javascript" src="/js/http.js"></script>
+<script type="text/javascript" src="/js/msg.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/javascript">
+var was={};
+var filters=[5];
+var options={'style':'','noscan':0,'opennew':0,'collapse':0,'view':0,'thdr':0,'noavtr':0};
+var timestamp=1349894813;
+var uid=0;
+</script>
+</head>
+
+
+
+
+<body>
+
+<!-- header -->
+<div id="hdr" align="center" style="padding:0; text-align:center;">
+<table cellspacing="0" align="center" style="line-height:20%">
+
+<caption id="the" style="height:50px; white-space:nowrap; text-align:left; padding: 6px 0pt 0pt 2px">
+<a id="date" href="/url?http://eenews.ru" title="Новости"
+	style="display;block; float:right; z-index:77; font:italic 12pt georgia,times; opacity:0.9; white-space:nowrap; text-align:right; margin:0 10px 0 0; padding:3px;color:#000;">Среда<br>10 октября</a>
+<a href="/login" style="padding:0 0 5px 17px; background:url(/images/userinfo.gif) no-repeat 0 0" title="Вход в форумы" >Вход</a>
+|<a href="/sitemap.html" title="Наше всё">Карта сайта</a>
+|<a href="/projects/">Проекты</a>
+|<a href="/map/" title="Геокаталог предприятий"><img alt="" src="/map/images/map_small.png" style="vertical-align:top"></a>
+|<a href="/upload" title="Файлообменник" style="font:bold 1.3em lucide console,courier;text-decoration:none;color:#90c">Upload</a>
+|<a href="/codebook/" title="Каталог маркировок"><img alt="codebook" src="/codebook/images/codebook.81px.png" style="vertical-align:top"></a>
+|<a href="http://mcu.ru/" title="Большая база микроконтроллеров"><img alt="codebook" src="/images/mcu.ru.png"></a>
+|<a href="/rss.xml" style="padding-left:15px; background: url(/images/xml.gif) no-repeat left center">RSS</a>
+</caption>
+
+<tr>
+<td id='adTopLeft' style='width:1%;padding-left:25px;vertical-align:bottom' rowspan=2></td>
+<td style='width:49%;padding:5px 17px 0 0;text-align:right;white-space:nowrap;'><p>&nbsp;<a id='a_11' class='a2' href='/zen.html' title='Ответы на главные вопросы жизни, вселенной и всего такого'>О смысле всего сущего</a><a id='s_11'>&#8226;</a>&nbsp;<a id='a_8' class='a2' href='/off.html' title='Здесь нет вебмастера, только  модераторы'>0xFF</a><a id='s_8'>&#8226;</a></p><p>&nbsp;<a id='a_10' class='a2' href='/dao.html' title='Машины не научатся думать до тех пор, пока не научатся думать люди'>Средства и методы разработки</a><a id='s_10'>&#8226;</a></p><p>&nbsp;<a id='a_2' class='a2' href='/rfid.html' title='ГЛОНАСС, GSM/GPRS,  Bluetooth, ZigBee, GPS, RF, RFID и смарткарты'>Мобильная и беспроводная связь</a><a id='s_2'>&#8226;</a></p><p>&nbsp;<a id='a_17' class='a2' href='/tech.html' title='Современные промышленные технологии'>Технологии</a><a id='s_17'>&#8226;</a>&nbsp;<a id='a_15' class='a2' href='/misc.html' title='Объявления'>Объявления</a><a id='s_15'>&#8226;</a></p></td>
+<td style='text-align:center;width:278px'>
+<a href='/'><img style='width:278px; height:75px; background:transparent' alt='caxapa' src='/images/logo/caxapa.png' title='Ваши конференции'></a>
+</td>
+<td style='width:49%;padding:5px 0 0 17px;text-align:left;white-space:nowrap;'><p><a id='s_3'>&#8226;</a><a id='a_3' class='a2' href='/mcu.html' title='Микроконтроллеры'>Микроконтроллеры</a>&nbsp;<a id='s_6'>&#8226;</a><a id='a_6' class='a2' href='/arm.html' title='ARM7 ARM9 ARM11 Cortex M0 -М1 -M3 -M4 -R4 -A5 -A8 -A9 -A15 Stellaris Sitara'>ARM</a>&nbsp;</p><p><a id='s_14'>&#8226;</a><a id='a_14' class='a2' href='/avr.html' title='Микроконтроллеры AVR'>AVR</a>&nbsp;<a id='s_9'>&#8226;</a><a id='a_9' class='a2' href='/pic.html' title='Продукция Микрочип'>PIC</a>&nbsp;<a id='s_4'>&#8226;</a><a id='a_4' class='a2' href='/msp.html' title='Микроконтроллеры MSP430'>MSP</a>&nbsp;<a id='s_16'>&#8226;</a><a id='a_16' class='a2' href='/cyber.html' title='АСУ, промавтоматика, умные дома с гигантскими боевыми человекоподобными роботами'>Кибернетика</a>&nbsp;</p><p><a id='s_13'>&#8226;</a><a id='a_13' class='a2' href='/pld.html' title='ПЛИС FPGA CPLD VHDL verilog'>Программируемая логика</a>&nbsp;<a id='s_12'>&#8226;</a><a id='a_12' class='a2' href='/dsp.html' title='Цифровая обработка сигналов'>DSP</a>&nbsp;</p><p><a id='s_5'>&#8226;</a><a id='a_5' class='a2' href='/sch.html' title='Схемы, платы, компоненты'>Схемы, платы, компоненты</a>&nbsp;</p></td>
+<td id='adTopRight' style='width:1%;padding-right:25px;vertical-align:bottom' rowspan=2></td>
+</tr>
+<tr><td id='adTopCenter' colspan=3 style='text-align:center'><h1><a href='/'>Схемы, платы, компоненты</a></h1></td></tr>
+</table>
+
+<!-- pager -->
+<div class="pager" style="text-align:left;opacity:0.85;padding:15px 0 3px 15px">&nbsp;</div>
+
+</div>
+
+
+<script type="text/javascript">show_ads()</script>
+
+<!-- toolbar -->
+<table border=0 cellspacing=0 width='100%' id='cpanel'>
+ <tr>
+  <td>&nbsp;&nbsp;
+	<a href='/sch.html?id=0'>Новая тема</a>	<a href="/rules" title="">Правила</a>
+	  </td>
+  <td style="text-align:right;">
+	<a href="/search">Поиск <b>»»</b></a>
+	<a href="/archive" style="padding: 0px 0 1px 19px; background:url(/images/tb_safe.gif) no-repeat left center">Архив</a>
+  </td>
+ </tr>
+</table>
+
+
+
+<!-- actions -->
+<table class="msg-actions" width="100%" style="clear:both; border-width:1px; border-top-style:solid;width:100%">
+<tr style="vertical-align:middle"><td>
+&#8226;<a href="/sch.html">Вернуться в конференцию</a>
+&#8226;<a href="149877.html?todo=full">Топик полностью</a></td><td style="width:99%;text-align:right">
+</tr>
+</table>
+<!-- actions -->
+
+<div id='msg' style='padding:20px;padding-bottom:7px;margin:0'>
+
+<!-- message #149886 -->
+<table class='msg' style='width:100%' id='x_149886'><tr>
+ <td class='usr' style='display:none;'><a href='/members/?1436' title='Профиль'><img src='/members/avatars/1436'/></a></td>
+ <td class='data' style='width:99%; white-space:'>
+ <a href='/members/?1436' title='Профиль' style='background:url(/images/5stars.png) no-repeat -85px; padding-left:3px'><strong>gamma</strong></a>&nbsp; (<span class='date'>03.03.2009 14:32</span>) , в ответ на <a href='149877.html'>Вопрос к господам из Гаммы: как подключать TIC107. Если по TIC32 есть апнота, то что такое Vdd123.. в тике107 и что с ними делать совершенно непонятно и из даташита на контроллер.</a> автор: <strong class='n'>Andreas </strong>
+<hr>
+<span style='color:#00C'>Что-то вроде application note еще не оформлено, но в теле сообщения пример, который поможет.</span>&nbsp;<br clear=all>
+
+Схема включения TIC107:
+Вывод
+1 - SCL - i2c
+2 - POR - сброс драйвера, сброс высоким уровнем
+3 - SDA - i2c
+4 - VDD1 - +5В
+5 - VDD2/VDD3 - +5В
+6 - VSS - земля
+7 - VLCD - керамический конденсатор ~1мкФ на землю
+
+<pre><code class='cpp'>/*  -------------------------------------------------------------------------
+ */
+
+ 
+
+#define TIC107_RESET        (RC5)
+#define TIC107_RESET_TRIS   (TRISC5)
+#define TIC107_ADDR         (0x74)
+
+ 
+
+#define CON1        (0b10000000)
+#define CON2        (0b01000000)
+
+ 
+
+void tic107_init(void)
+{
+    TIC107_RESET      = HIGH;           // external reset active HIGH
+    TIC107_RESET_TRIS = OUT;
+    delay_ms(5);
+    TIC107_RESET      = LOW;
+    delay_ms(5);                        // at least 2ms for initialisation
+
+ 
+
+    i2c_start(TIC107_ADDR);
+
+ 
+
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110100);              // DL=1, M=1, SL=0, H=0
+    i2c_write(0b00001100);              // D=1, C=0, B=0
+    i2c_write(0b00000110);              // I/D=1, S=0
+
+ 
+
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b00000011);              // L=1
+    i2c_write(0b00000100);              // P=0, Q=0
+    i2c_write(0b00001000);              // IM=0, IB=0
+    i2c_write(0b00010000);              // TC1=0, TC2=0
+    i2c_write(0b01000010);              // S1=1, S0=0 (4x)
+    i2c_write(0b10000000 | 23);         // V=0 (Va)
+    
+    i2c_stop();
+}
+
+ 
+
+/*  -------------------------------------------------------------------------
+ */
+
+ 
+
+void tic107_contrast(uint8 val)
+{
+    i2c_start(TIC107_ADDR);
+
+ 
+
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b10000000 | val);        // V=0 (Va)
+    
+    i2c_stop();
+}
+
+ 
+
+/*  -------------------------------------------------------------------------
+ */
+
+ 
+
+// Гамма СПб - ЖКИ
+const byte str1[] = { 0x45, 0xE1, 0x6C, 0x6C, 0xE1, 0x20, 0xC3, 0x96,
+                      0x54, 0x20, 0xAD, 0x20, 0x47, 0xCB, 0x49, 0x20 };
+// COG 16x2 PCF2119
+const byte str2[] = { 0xC3, 0xCF, 0xC7, 0x20, 0xB1, 0xB6, 0xF8, 0xB2,
+                      0x20, 0xD0, 0xC3, 0xC6, 0xB2, 0xB1, 0xB1, 0xB9 };
+
+ 
+
+void main(void)
+{
+    // ...
+
+ 
+
+    tic107_init();
+
+ 
+
+    // вывод str1 в первую строку
+    i2c_start(TIC107_ADDR);
+    i2c_write(0b01000000);              // Co=0, RS=1
+    for(tmp = 0; tmp &lt; 16; tmp++)
+        i2c_write(str1[tmp]);
+    i2c_stop();
+
+ 
+
+    // смещаем указатель на вторую строку
+    i2c_start(TIC107_ADDR);
+    i2c_write(0b00000000);              // Co=0, RS=0
+    i2c_write(0b00110100);              // DL=1, M=1, SL=0, H=0
+    i2c_write(0b10000000 | 0x40);       // set DDRAM address
+    i2c_stop();
+
+ 
+
+    // вывод str2 по указателю (вторая строка)
+    i2c_start(TIC107_ADDR);
+    i2c_write(0b01000000);              // Co=0, RS=1
+    for(tmp = 0; tmp &lt; 16; tmp++)
+        i2c_write(str2[tmp]);
+    i2c_stop();
+
+ 
+
+    // зеркалирование право-лево, верх-низ (биты P, Q)
+    i2c_start(TIC107_ADDR);
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b00000100);              // P=0, Q=0
+    i2c_stop();
+    delay_ms(2000);
+
+ 
+
+    i2c_start(TIC107_ADDR);
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b00000101);              // P=0, Q=1
+    i2c_stop();
+    delay_ms(2000);
+
+ 
+
+    i2c_start(TIC107_ADDR);
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b00000110);              // P=1, Q=0
+    i2c_stop();
+    delay_ms(2000);
+
+ 
+
+    i2c_start(TIC107_ADDR);
+    i2c_write(0x00);                    // Co=0, RS=0
+    i2c_write(0b00110101);              // DL=1, M=1, SL=0, H=1
+    i2c_write(0b00000111);              // P=1, Q=1
+    i2c_stop();
+    delay_ms(2000);
+
+ 
+
+    // изменение контраста
+    for(tmp = 0; tmp &lt; 64; tmp++)
+    {
+        delay_ms(100);
+        tic107_contrast(tmp);
+     }
+
+ 
+
+     tic107_contrast(23);
+
+ 
+
+    // ...
+}
+
+ 
+
+/*  =====================================================================  */</code></pre></td>
+</tr>
+</table>
+<!-- end message -->
+
+</div>
+
+<div id="topics" style="margin:0 20px; clear:both;" class='arc'>
+<ul id="root">
+<li style="padding:0">
+<div style="padding-bottom:0.25em; margin-bottom:0.3em; border-bottom:groove 2px #eee">
+<img id="_rim" class="expand" style="cursor:pointer;margin-right:5px" src="/images/minus.gif" onclick="shrink(this)" alt="+">
+<a onclick="shrink(document.getElementById('_rim'))" style="font-size:120%; color:blue; margin:0 7em 0 0">Ответы</a>
+<input id='full' onclick="fulltopic(this)" type="checkbox"><span class="msg-actions">Развернуть</span>
+</div>
+
+<ul class='node' >
+ <li class='node'><img class='expand' src='/images/none.gif' alt=''><a href='150260.html'>А по TIC149 можете подсказать? Интересуют значения битов BRS, TRS, TC, S0, S1, PRS, IB. </a>- <strong class='n'>Сергей Борщ</strong><span class='small'>(<span class='date'>07.03.2009 20:13</span>)</span><a id='1236445988.5'></a></li>
+</ul>
+<ul class='node' >
+ <li class='node'><img class='expand' style='cursor:pointer' src='/images/minus.gif' onclick='shrink(this)' alt='+'><a href='149887.html'>Спасибо, хоть что-то. Зря вы в апнотах в двоичном виде данные даете, все равно большинство парится, переделывает. </a>- <strong class='n'>Andreas</strong><span class='small'>(<span class='date'>03.03.2009 14:41</span>)</span><a id='1236080478.5'></a>
+ <ul class='node' >
+  <li class='node'><img class='expand' src='/images/none.gif' alt=''><a href='149891.html'>Это рабочий пример. Вся инфа почерпнута из даташита на PCF2119. </a>- <strong class='n'>gamma</strong><span class='small'>(<span class='date'>03.03.2009 14:57</span>)</span><a id='1236081478.5'></a></li>
+ </ul>
+ <ul class='node' >
+  <li class='node'><img class='expand' style='cursor:pointer' src='/images/minus.gif' onclick='shrink(this)' alt='+'><a href='149890.html'>А если в hex-виде будет, то не переделывают? Это ТОЛЬКО пример, в котором сразу видны биты. Имхо, для примера такой вариант предпочтительнее. </a>- <strong class='n'>gamma</strong><span class='small'>(<span class='date'>03.03.2009 14:57</span>)</span><a id='1236081440.5'></a>
+  <ul class='node' >
+   <li class='node'><img class='expand' style='cursor:pointer' src='/images/minus.gif' onclick='shrink(this)' alt='+'><a href='149895.html'>Копи - паст и в путь... Для тика32 я бин в хекс переделал, все заработало и спокойно переключился на основное. </a>- <strong class='n'>Andreas</strong><span class='small'>(<span class='date'>03.03.2009 15:45</span>)</span><a id='1236084312.5'></a>
+   <ul class='node' >
+    <li class='node'><img class='expand' src='/images/none.gif' alt=''><a href='149896.html'>Может и так... Подумаю. Оформим макросами - копи-паст работать будет и биты видны. </a>- <strong class='n'>gamma</strong><span class='small'>(<span class='date'>03.03.2009 15:49</span>, <a href='http://caxapa.ru/84852.html' target='_blank'><strong>ссылка</strong></a>)</span><a id='1236084594.5'></a></li>
+   </ul></li>
+  </ul></li>
+ </ul></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<script language="javascript">
+_mus(149886);
+_rl(149886);
+</script>
+
+
+<!-- tmark=0.84190201759338 -->
+
+
+<script type="text/javascript" src="/highlight/highlight.js"></script>
+<script type="text/javascript">initHighlightingOnLoad("cpp","asm","c");</script>
+
+<!-- footer -->
+<style type="text/css">
+#btm {color:#777;margin:0 auto}
+#btm,table#btm a{font:normal 11px tahoma,arial}
+#btm td {text-align:center;vertical-align:top}
+div#cpylft,div#cpylft a{font:normal 9px tahoma,arial}
+</style>
+
+<div style="text-align:center; clear:both;padding:10px 0px;">
+<table id="btm"> 
+<tbody><tr>
+<td style="width:88px"><a href="http://vk.com/stopvto"><img src="/images/events/anti_wto.png" title="Анти ВТО"></a></td>
+<td style="width:99%;;text-align:center;padding:0px 15px;white-space:normal">
+	<a href="http://caxapa.ru">Главная</a> |
+	<a href="http://caxapa.ru/sitemap.html">Карта сайта</a> |
+	<a href="http://caxapa.ru/about.html">О проекте</a> |
+	<a href="http://caxapa.ru/projects/">Проекты</a> |
+	<a href="http://caxapa.ru/upload">Файлообменник</a> |
+	<a href="http://caxapa.ru/login">Регистрация</a> |
+	<a href="http://caxapa.ru/admin.html">Вебмастер</a>    
+<div id="cpylft" style="margin-top:1em;text-align:center">
+     При использовании материалов сайта ссылка на <a href="http://caxapa.ru">caxapу</a> обязательна.
+     <br>MMI&nbsp;©&nbsp;MMXII<br>
+</div>
+</td>
+<td style="text-align:left;width:88px;padding:0.3em" width="88">
+	<a target="_blank" href="http://top100.rambler.ru/top100/"><img src="http://top100-images.rambler.ru/top100/banner-88x31-rambler-gray2.gif" alt="" height="31" border="0" width="88"></a>
+	<!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='http://www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t23.6;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='LiveInternet: показано число посетителей за"+
+" сегодня' "+
+"border='0' width='88' height='15'><\/a>")
+//--></script><!--/LiveInternet-->
+	<img src="http://counter.rambler.ru/top100.cnt?303062" alt="" height="1" border="0" width="1">
+</td>
+</tr>
+</table>
+</div>
+<!-- end footer -->
+</body>
+</html>

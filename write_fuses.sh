@@ -1,0 +1,1 @@
+avrdude	-pm16 -cusbasp -u -Ulfuse:w:0xee:m -Uhfuse:w:0xcf:m

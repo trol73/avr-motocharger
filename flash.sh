@@ -1,0 +1,1 @@
+avrdude	-pm16 -cusbasp -u -Uflash:w:firmware/Release/motocharger.hex:a
