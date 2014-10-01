@@ -82,7 +82,7 @@ void ui_PrintVar(uint8_t varType, uint16_t val) {
 			break;
 		case UI_VAR_CHARGE_PULSE_TIME:
 		case UI_VAR_DISCHARGE_PULSE_TIME:
-			// 000.000s
+			// 10 0000mS
 			break;
 	}
 }
