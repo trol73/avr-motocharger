@@ -68,6 +68,74 @@ void LCD_contrast(uint8_t val) {
 }
 
 
+void LCD_PrintChar(char ch) {
+	i2c_start();
+	i2c_sendAddress(TIC107_ADDR);
+	i2c_sendByte(0b01000000);              // Co=0, RS=1
+	i2c_sendByte(ch+128);
+	i2c_stop();
+}
+
+void LCD_PrintStr(PGM_P str) {
+	i2c_start();
+	i2c_sendAddress(TIC107_ADDR);
+	i2c_sendByte(0b01000000);              // Co=0, RS=1
+
+	for (;;) {
+		uint8_t c = pgm_read_byte_near(str++);
+		if (c == 0) {
+			break;
+		}
+		i2c_sendByte(c+128);
+	}
+	i2c_stop();
+}
+
+void LCD_GotoXY(uint8_t x, uint8_t y) {
+	i2c_start();
+
+	i2c_sendAddress(TIC107_ADDR);
+	i2c_sendByte(0b00000000);              // Co=0, RS=0
+	i2c_sendByte(0b00110100);              // DL=1, M=1, SL=0, H=0
+	uint8_t addr = y == 0 ? 0 : 0x40;
+	i2c_sendByte(0b10000000 | (addr+x));       // set DDRAM address
+	i2c_stop();
+}
+
+
+void LCD_PrintInt(uint16_t val) {
+	uint16_t num = 10000;
+	bool started = false;
+
+	i2c_start();
+	i2c_sendAddress(TIC107_ADDR);
+	i2c_sendByte(0b01000000);              // Co=0, RS=1
+
+	while (num > 0) {
+		uint8_t b = val / num;
+		if (b > 0 || started || num == 1) {
+			i2c_sendByte('0' + b + 128);
+			started = true;
+		}
+		val -= b * num;
+		num /= 10;
+	}
+	i2c_stop();
+}
+
+
+void LCD_Clear() {
+	i2c_start();
+	i2c_sendAddress(TIC107_ADDR);
+	i2c_sendByte(0b01000000);              // Co=0, RS=1
+
+	for (uint8_t i = 0; i < 0x80; i++) {
+		i2c_sendByte(' ' + 128);
+	}
+	i2c_stop();
+	LCD_GotoXY(0, 0);
+}
+
 
 
 #endif /* DISPLAY_H_ */

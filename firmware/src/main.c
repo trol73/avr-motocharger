@@ -17,95 +17,86 @@
 #include "display.h"
 #include "debug.h"
 
+#include "strings.h"
+#include "keyboard.h"
+
+
+const char PROGMEM STR_HELLO[] = "Hello!";
+const char PROGMEM STR_WORLD[] = "Мир";
+
+static void init() {
+	DDRA = 0;
+	DDRB = 0;
+	DDR(LED_DATA_PORT) = _BV(LED_PIN_GREEN) | _BV(LED_PIN_RED);
+	DDR(BEEPER_PORT) = _BV(BEEPER_PIN);
+}
 
 int main(void) {
+	init();
+
 	uart_init();
 	MSG("INIT");
 //	cli();
-
-/*
-	DDRC = 0xff;
-	MSG_HEX("DDRC = ", DDRC, 1);
-	while (true) {
-		PORTC = 0xff;
-		MSG_HEX("PORTC = ", PORTC, 1);
-		MSG_HEX("PINC = ", PINC, 1);
-		_delay_ms(2000);
-		PORTC = 0x0;
-		MSG_HEX("PORTC = ", PORTC, 1);
-		MSG_HEX("PINC = ", PINC, 1);
-		_delay_ms(2000);
-
-	}
-*/
 
 	LCD_init();
 
 	LCD_contrast(0xff);
 
-	i2c_start();
+	LCD_PrintStr(STR_HELLO);
 
-	i2c_sendAddress(TIC107_ADDR);
+	LCD_GotoXY(1, 1);
 
-	i2c_sendByte(0b01000000);              // Co=0, RS=1
+	//LCD_PrintStr(STR_WORLD);
+	//LCD_PrintInt((uint8_t)'А');
+	// en  A - 65 => 65+128 = 193
+	// rus A - 144
+//	LCD_PrintInt(a);
+//
+//	LCD_PrintChar(' ');
+	for (uint8_t i = 0; i < 16;i++) {
+		LCD_PrintChar(40+i);
+	}
 
-	i2c_sendByte('1'+128);
-	i2c_sendByte('A'+128);
-	i2c_sendByte('F'+128);
-	i2c_sendByte('B'+128);
-	i2c_sendByte('2'+128);
-	i2c_sendByte('a'+128);
-	i2c_sendByte('f'+128);
-	i2c_sendByte('b'+128);
-	i2c_sendByte('3'+128);
-	i2c_sendByte('d'+128);
-	i2c_sendByte('D'+128);
-	i2c_sendByte('E'+128);
-	i2c_sendByte('7'+128);
-	i2c_sendByte('3'+128);
-	i2c_sendByte('5'+128);
-	i2c_sendByte('L'+128);
-	i2c_stop();
-
-
-	 // смещаем указатель на вторую строку
-	i2c_start();
-
-	i2c_sendAddress(TIC107_ADDR);
-	i2c_sendByte(0b00000000);              // Co=0, RS=0
-	i2c_sendByte(0b00110100);              // DL=1, M=1, SL=0, H=0
-	i2c_sendByte(0b10000000 | 0x40);       // set DDRAM address
-	i2c_stop();
-
-
-
-
-
-	i2c_start();
-
-	i2c_sendAddress(TIC107_ADDR);
-
-	i2c_sendByte(0b01000000);              // Co=0, RS=1
-
-	i2c_sendByte('1'+128);
-	i2c_sendByte('A'+128);
-	i2c_sendByte('F'+128);
-	i2c_sendByte('B'+128);
-	i2c_sendByte('2'+128);
-	i2c_sendByte('a'+128);
-	i2c_sendByte('f'+128);
-	i2c_sendByte('b'+128);
-	i2c_sendByte('3'+128);
-	i2c_sendByte('d'+128);
-	i2c_sendByte('D'+128);
-	i2c_sendByte('E'+128);
-	i2c_sendByte('7'+128);
-	i2c_sendByte('3'+128);
-	i2c_sendByte('5'+128);
-	i2c_sendByte('L'+128);
-	i2c_stop();
-
+	uint8_t i = 0;
 	while (true) {
+		keyboardCheck();
+		bool update = false;
+		if (key_click_flag[KEY_UP]) {
+			if (i < 2) {
+				i++;
+				update = true;
+			}
+		}
+		if (key_click_flag[KEY_DOWN]) {
+			if (i != 0) {
+				i--;
+				update = true;
+			}
+		}
+		if (update) {
+			LCD_Clear();
+			switch(i) {
+				case 0:
+					LCD_PrintStr(STR_START);
+					break;
+				case 1:
+					LCD_PrintStr(STR_PROFILE);
+					break;
+				case 2:
+					LCD_PrintStr(STR_SETTINGS);
+					break;
+			}
+			LCD_GotoXY(0, 1);
+			LCD_PrintInt(i);
+			_delay_ms(500);
+		}
 
+//		LCD_GotoXY(0, 1);
+//		LCD_PrintInt(key_counter[KEY_UP]);
+//		LCD_PrintChar(' ');
+//		LCD_PrintInt(key_counter[KEY_DOWN]);
+//		LCD_PrintChar(' ');
+//		LCD_PrintInt(key_click_flag[KEY_UP]);
+		_delay_us(1000);
 	}
 }
