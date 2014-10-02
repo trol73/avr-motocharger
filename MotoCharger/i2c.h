@@ -29,8 +29,8 @@
 
 
 static void i2c_init();
-static bool i2c_sendAddress(uint8_t address);
-static bool i2c_start();
+static bool i2c_SendAddress(uint8_t address);
+static bool i2c_Start();
 
 
 static void i2c_init() {
@@ -50,14 +50,14 @@ static void i2c_wait() {
 }
 
 
-static bool i2c_start() {
+static bool i2c_Start() {
 	TWCR = _BV(TWINT)|_BV(TWEN)|_BV(TWSTA);	// send START condition
 	i2c_wait();
 	return TW_STATUS == TW_START;
 }
 
 
-static bool i2c_sendAddress(uint8_t address) {
+static bool i2c_SendAddress(uint8_t address) {
 	uint8_t status;
 
 	if ( (address & 0x01) == 0 ) {
@@ -73,7 +73,7 @@ static bool i2c_sendAddress(uint8_t address) {
 }
 
 
-static bool i2c_sendByte(uint8_t byte) {
+static bool i2c_SendByte(uint8_t byte) {
 	TWDR = byte;
 	TWCR = _BV(TWINT)| _BV(TWEN);
 	i2c_wait();
@@ -99,7 +99,7 @@ static bool i2c_receiveByteNACK(uint8_t *byte) {
 }
 
 
-static bool i2c_stop() {
+static bool i2c_Stop() {
 	TWCR = _BV(TWINT)|_BV(TWEN)|_BV(TWSTO); // send STOP condition
 	uint16_t cnt = 0;
 	while ( TWCR & _BV(TWSTO) ) {

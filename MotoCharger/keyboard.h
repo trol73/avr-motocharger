@@ -16,15 +16,15 @@
 #define KEY_UP_OR_DOWN	4
 
 
-uint8_t key_counter[4];						// счетчики удержания клавиш, содержат время удержания клавиш в 1/20 сек, или 0, если клавиша отпущена
-bool key_click_flag[5];					// флаги того, что клавиша была нажата и отпущена
-uint8_t key_up_minus_down;					// занчение key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN]
+uint8_t key_counter[4];						// keys repeat counters. contains the time of key was pressed in 1/20sec (0 if key doesn't pressed)
+bool key_click_flag[5];						// flags that key was pressed and released
+uint8_t key_up_minus_down;					// value of (key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN])
 
 
 /**
  *
  */
-inline uint8_t key_is_repeated(uint8_t key) {
+inline bool key_is_repeated(uint8_t key) {
 	return key_counter[key] > 15;
 }
 
@@ -33,9 +33,8 @@ inline uint8_t key_is_repeated(uint8_t key) {
 
 
 /*
- * Опрашивает клавиатуру, инкрементируя или сбрасывая счетчики key_counter.
- * Вызов не должен пересекаться с вызывами процедур LCD.
- */
+ * Scans keyboard with increment or reset key_counter's.
+  */
 static inline void keyboardCheck() {
 	// configure keyboard pins to input
 	DDR(KEYBOARD_DATA_PORT) &= ~(_BV(KEYBOARD_PIN_ENTER) | _BV(KEYBOARD_PIN_BACK) | _BV(KEYBOARD_PIN_UP) | _BV(KEYBOARD_PIN_DOWN));

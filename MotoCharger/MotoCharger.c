@@ -15,14 +15,15 @@
 
 #include "i2c.h"
 #include "display.h"
+#include "video.h"
 #include "debug.h"
 
 #include "strings.h"
 #include "keyboard.h"
+#include "ui_constants.h"
+#include "ui_variables.h"
+#include "ui.h"
 
-
-const char PROGMEM STR_HELLO[] = "Hello!";
-const char PROGMEM STR_WORLD[] = "Мир";
 
 static void init() {
 	DDRA = 0;
@@ -31,72 +32,55 @@ static void init() {
 	DDR(BEEPER_PORT) = _BV(BEEPER_PIN);
 }
 
+void beep(bool enable)  {
+	if (enable) {
+		PORT(BEEPER_PORT) |= _BV(BEEPER_PIN);
+	} else {
+		PORT(BEEPER_PORT) &= ~_BV(BEEPER_PIN);
+	}
+}
+
 int main(void) {
 	init();
+	
+	beep(false);
 
 	uart_init();
-	MSG("INIT");
-	//	cli();
 
-	LCD_init();
+	LCD_Init();
+	LCD_Contrast(0xff);
+	video_Reset();
 
-	LCD_contrast(0xff);
+	//LCD_PrintStr(STR_CHARGE);
+	
+	
+//	LCD_GotoXY(1, 1);
 
-	LCD_PrintStr(STR_HELLO);
+// 	for (uint8_t i = 0; i < 16;i++) {
+// 		LCD_PrintChar(40+i);
+// 	}
 
-	LCD_GotoXY(1, 1);
+	video_Write('!');
+	video_GotoXY(0, 1);
+	video_Write('A');
 
-	//LCD_PrintStr(STR_WORLD);
-	//LCD_PrintInt((uint8_t)'А');
-	// en  A - 65 => 65+128 = 193
-	// rus A - 144
-	//	LCD_PrintInt(a);
-	//
-	//	LCD_PrintChar(' ');
-	for (uint8_t i = 0; i < 16;i++) {
-		LCD_PrintChar(40+i);
-	}
-
-	uint8_t i = 0;
+	uint16_t i = 0;
 	while (true) {
-		keyboardCheck();
-		bool update = false;
-		if (key_click_flag[KEY_UP]) {
-			if (i < 2) {
-				i++;
-				update = true;
-			}
-		}
-		if (key_click_flag[KEY_DOWN]) {
-			if (i != 0) {
-				i--;
-				update = true;
-			}
-		}
-		if (update) {
-			LCD_Clear();
-			switch(i) {
-				case 0:
-				LCD_PrintStr(STR_START);
-				break;
-				case 1:
-				LCD_PrintStr(STR_PROFILE);
-				break;
-				case 2:
-				LCD_PrintStr(STR_SETTINGS);
-				break;
-			}
-			LCD_GotoXY(0, 1);
-			LCD_PrintInt(i);
-			_delay_ms(500);
-		}
-
-		//		LCD_GotoXY(0, 1);
-		//		LCD_PrintInt(key_counter[KEY_UP]);
-		//		LCD_PrintChar(' ');
-		//		LCD_PrintInt(key_counter[KEY_DOWN]);
-		//		LCD_PrintChar(' ');
-		//		LCD_PrintInt(key_click_flag[KEY_UP]);
-		_delay_us(1000);
+		video_GotoXY(0, 0);
+		video_WriteStr(STR_CHARGE);
+		video_GotoXY(0, 1);
+		video_WriteFloat(i++, 100, 3);
+		video_Repaint();
+		_delay_ms(20000);
 	}
+
+// 	while (true) {
+// 		keyboardCheck();
+// 		ui_processKeys();
+// 		
+// 		ui_Draw();
+// 		video_Repaint();
+// 		_delay_ms(100);
+// 	}
+
 }

@@ -25,64 +25,55 @@
 uint16_t ui_vars[__UI_VAR_COUNT];
 
 
-/************************************************************************/
-/* Print a float                                                        */
-/* digits_mask - defines number of digits (1 for one-digits number,		*/
-/*		10 - two digits, 100 - for three-digits etc.)					*/
-/* digits_whole - number of digits in integral part						*/
-/************************************************************************/
-void ui_PrintFloat(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) {	
-	for (uint8_t i = 0; ; i++) {
-		if (i == digits_whole) {
-			LCD_PrintChar('.');
-		}
-		LCD_PrintChar('0' + val / digits_mask);
-		val %= digits_mask;
-		if (digits_mask == 1) {
-			break;
-		}
-		digits_mask /= 10;
-	}
-}
-
 
 /************************************************************************/
 /* Print a tie part: minutes or seconds. Two-digits number              */
 /************************************************************************/
 void ui_PrintTimePart(uint8_t val) {
 	if (val < 10) {
-		LCD_PrintChar('0');
+		video_Write('0');
 	} else {
-		LCD_PrintChar(val / 10);
+		video_Write(val / 10);
 	}
-	LCD_PrintChar(val % 10);
+	video_Write(val % 10);
 }
 
 /************************************************************************/
 /* Print a variable                                                     */
 /************************************************************************/
-void ui_PrintVar(uint8_t varType, uint16_t val) {
+void ui_PrintVar(uint8_t varType, uint16_t val, bool unit) {
 	switch (varType) {
 		case UI_VAR_U_CHARGE:
 		case UI_VAR_U_DISCHARGE:
 			// 12.5V
-			ui_PrintFloat(val, 100, 2);
+			video_WriteFloat(val, 100, 2);
+			if (unit) {
+				video_Write('V');
+			}
 			break;
 		case UI_VAR_I_CHARGE:
 		case UI_VAR_I_DISCHARGE:
-			ui_PrintFloat(val, 100, 1);
 			// 1.10A
+			video_WriteFloat(val, 100, 1);
+			if (unit) {
+				video_Write('A');
+			}
 			break;
 		case UI_VAR_TIME_CHARGE:
 		case UI_VAR_TIME_DISCHARGE:
 			// 10:00
 			ui_PrintTimePart(val / 60);
-			LCD_PrintChar(':');
+			video_Write(':');
 			ui_PrintTimePart(val % 60);
 			break;
 		case UI_VAR_CHARGE_PULSE_TIME:
 		case UI_VAR_DISCHARGE_PULSE_TIME:
 			// 10 0000mS
+			video_WriteFloat(val, 10000, 5);
+			if (unit) {
+				video_Write('m');
+				video_Write('S');
+			}
 			break;
 	}
 }
