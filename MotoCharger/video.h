@@ -96,6 +96,16 @@ void video_WriteFloat(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) 
 }
 
 
+void video_WriteUInt8(uint8_t val) {
+	uint8_t mask = 100;
+	while (true) {
+		video_Write('0' + val / mask);
+		val %= mask;
+		mask /= 10;
+	}
+}
+
+
 /************************************************************************/
 /* Copy video memory from current page to display and swap pages        */
 /************************************************************************/
