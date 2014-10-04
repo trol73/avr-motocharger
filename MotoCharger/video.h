@@ -44,8 +44,19 @@ void video_Reset() {
 	LCD_Clear();
 }
 
+
 /************************************************************************/
-/* Write char to current position                                       */
+/* Очищает экран и переводит курсов в начальную позицию                 */
+/************************************************************************/
+void video_Clear() {
+	for (uint8_t i = 0; i < 32; i++) {
+		video_memory[video_currentPageOffset+i] = ' ';
+	}
+	video_GotoXY(0, 0);
+}
+
+/************************************************************************/
+/* Выводит символ в текущую позицию курсора                             */
 /************************************************************************/
 void video_Write(char ch) {
 	video_memory[video_pos++] = ch;
@@ -89,14 +100,14 @@ void video_WriteFloat(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) 
 /* Copy video memory from current page to display and swap pages        */
 /************************************************************************/
 void video_Repaint() {
-	uint8_t otherViewoPageOffset = 32 - video_currentPageOffset;
-	
+	uint8_t otherViewPageOffset = 32 - video_currentPageOffset;
+
 	// compare memory pages data: first line
 	bool changed = false;
-	for (uint8_t i=0; i < 16; i++) {
+	for (uint8_t i = 0; i < 16; i++) {
 		if (video_memory[i] != video_memory[i+32]) {
 			changed = true;
-			video_memory[otherViewoPageOffset+i] = video_memory[video_currentPageOffset+i];
+			video_memory[otherViewPageOffset+i] = video_memory[video_currentPageOffset+i];
 		}
 	}
 	if (changed) {
@@ -105,10 +116,10 @@ void video_Repaint() {
 	}
 	// compare memory pages data: second line
 	changed = false;
-	for (uint8_t i=16; i < 32; i++) {
+	for (uint8_t i = 16; i < 32; i++) {
 		if (video_memory[i] != video_memory[i+32]) {
 			changed = true;
-			video_memory[otherViewoPageOffset+i] = video_memory[video_currentPageOffset+i];
+			video_memory[otherViewPageOffset+i] = video_memory[video_currentPageOffset+i];
 		}
 	}
 	if (changed) {
@@ -116,7 +127,7 @@ void video_Repaint() {
 		LCD_PrintLine(&video_memory[video_currentPageOffset]+16);
 	}
 	// swap pages
-	video_currentPageOffset = otherViewoPageOffset;
+	video_currentPageOffset = otherViewPageOffset;
 }
 
 

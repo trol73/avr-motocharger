@@ -16,9 +16,9 @@
 #define KEY_UP_OR_DOWN	4
 
 
-uint8_t key_counter[4];						// keys repeat counters. contains the time of key was pressed in 1/20sec (0 if key doesn't pressed)
-bool key_click_flag[5];						// flags that key was pressed and released
-uint8_t key_up_minus_down;					// value of (key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN])
+uint8_t key_counter[4];						// счетчики удержания клавиш. содержат время удержания клавиши, 1 единица соответствует  0.05 сек (0 - если клавиша отпущена)
+bool key_click_flag[5];						// флаги того, что клавиша была нажата и отпущена
+uint8_t key_up_minus_down;					// разность (key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN])
 
 
 /**

@@ -41,46 +41,28 @@ void beep(bool enable)  {
 }
 
 int main(void) {
+	uart_init();
+	MSG("INIT");
+	
 	init();
 	
 	beep(false);
-
-	uart_init();
 
 	LCD_Init();
 	LCD_Contrast(0xff);
 	video_Reset();
 
-	//LCD_PrintStr(STR_CHARGE);
-	
-	
-//	LCD_GotoXY(1, 1);
 
-// 	for (uint8_t i = 0; i < 16;i++) {
-// 		LCD_PrintChar(40+i);
-// 	}
+	ui_screen = SCREEN_MAIN;
+	meassuredU = 125;
 
-	video_Write('!');
-	video_GotoXY(0, 1);
-	video_Write('A');
-
-	uint16_t i = 0;
 	while (true) {
-		video_GotoXY(0, 0);
-		video_WriteStr(STR_CHARGE);
-		video_GotoXY(0, 1);
-		video_WriteFloat(i++, 100, 3);
+		keyboardCheck();
+		ui_processKeys();
+		
+		ui_Draw();
 		video_Repaint();
-		_delay_ms(20000);
+		_delay_ms(100);
 	}
-
-// 	while (true) {
-// 		keyboardCheck();
-// 		ui_processKeys();
-// 		
-// 		ui_Draw();
-// 		video_Repaint();
-// 		_delay_ms(100);
-// 	}
 
 }
