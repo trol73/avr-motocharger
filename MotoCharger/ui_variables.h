@@ -26,7 +26,7 @@
 
 uint16_t ui_vars[__UI_VAR_COUNT][UI_VARIABLES_COUNT];		// значения переменных
 
-const uint16_t ui_vars_max_limits[] PROGMEM = {170, 130, 500, 100, 0x6000, 0x6000};
+const uint16_t ui_vars_max_limits[] PROGMEM = {170, 130, 500, 100, 4*24*60, 4*24*60};
 
 /************************************************************************/
 /* Print a tie part: minutes or seconds. Two-digits number              */

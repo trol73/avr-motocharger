@@ -25,7 +25,7 @@ uint8_t key_up_minus_down;					// разность (key_click_flag[KEY_UP] - key_click_f
  *
  */
 inline bool key_is_repeated(uint8_t key) {
-	return key_counter[key] > 15;
+	return key_counter[key] > 50;//15;
 }
 
 

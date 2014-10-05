@@ -91,22 +91,6 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 	return false;
 }
 
-void ui_GotoScreen(uint8_t screen) {
-	ui_screen = screen;
-	switch (screen) {
-		case SCREEN_SETTINGS_MENU:
-			ui_index = 0;
-			break;
-		case SCREEN_SELECT_VALUE_FOR_EDIT:
-			ui_varType = ui_index;
-			ui_index = 0;
-			break;
-		case SCREEN_EDIT_VALUE:
-			ui_varIndex = ui_index;
-			ui_currentEditValue = ui_vars[ui_varType][ui_varIndex];
-			break;
-	}
-}
 
 const uint8_t ui_map_main_menu[] PROGMEM = {SCREEN_CHARGING, SCREEN_DISCHARGING, SCREEN_SETTINGS_MENU}; 
 
@@ -116,16 +100,19 @@ void ui_ProcessKeys() {
 		case SCREEN_MAIN:
 			if (!ui_ProcessUpDownMenu(2)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_GotoScreen(pgm_read_byte(&ui_map_main_menu[ui_index]));
+					ui_screen = pgm_read_byte(&ui_map_main_menu[ui_index]);
 				}
 			}
 			break;
 		case SCREEN_SETTINGS_MENU:
 			if (!ui_ProcessUpDownMenu(5)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_GotoScreen(SCREEN_SELECT_VALUE_FOR_EDIT);
+					ui_screen = SCREEN_SELECT_VALUE_FOR_EDIT;
+					ui_varType = ui_index;
+					ui_index = 0;
 				} else if (key_click_flag[KEY_BACK]) {
-					ui_GotoScreen(SCREEN_MAIN);
+					ui_index = 2;	// settings
+					ui_screen = SCREEN_MAIN;
 				}
 			}
 			break;
@@ -133,32 +120,32 @@ void ui_ProcessKeys() {
 		case SCREEN_SELECT_VALUE_FOR_EDIT:
 			if (!ui_ProcessUpDownMenu(UI_VARIABLES_COUNT-1)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_GotoScreen(SCREEN_EDIT_VALUE);
+					ui_screen = SCREEN_EDIT_VALUE;
+					ui_varIndex = ui_index;
+					ui_currentEditValue = ui_vars[ui_varType][ui_varIndex];
 				} else if (key_click_flag[KEY_BACK]) {
-					ui_GotoScreen(SCREEN_SETTINGS_MENU);
+					ui_screen = SCREEN_SETTINGS_MENU;
+					ui_index = ui_varType;
 				}
 			}
 			break;
 			
 		case SCREEN_EDIT_VALUE:
 			max = ui_GetMaxVarLimit(ui_varType);
-			if (key_click_flag[KEY_UP]) {
-MSG_DEC("+", ui_varType);
-MSG_DEC("m ", max);
+			if (key_click_flag[KEY_UP] || key_is_repeated(KEY_UP)) {
 				if (ui_currentEditValue < max) {
 					ui_currentEditValue++;
-MSG_DEC("> ", ui_currentEditValue);					
 				}
-			} else if (key_click_flag[KEY_DOWN]) {
+			} else if (key_click_flag[KEY_DOWN] || key_is_repeated(KEY_DOWN)) {
 				if (ui_currentEditValue > 1) {
 					ui_currentEditValue--;
 				}
 			} else if (key_click_flag[KEY_BACK]) {
-				ui_GotoScreen(SCREEN_SELECT_VALUE_FOR_EDIT);
+				ui_screen = SCREEN_SELECT_VALUE_FOR_EDIT;
+				ui_index = ui_varIndex;
 			}
-
 			break;
-			
+
 	}
 }
 
