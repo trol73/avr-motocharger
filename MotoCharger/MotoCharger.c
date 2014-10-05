@@ -58,7 +58,7 @@ int main(void) {
 
 	while (true) {
 		keyboardCheck();
-		ui_processKeys();
+		ui_ProcessKeys();
 		
 		ui_Draw();
 		video_Repaint();

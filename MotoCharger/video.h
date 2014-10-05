@@ -98,10 +98,20 @@ void video_WriteFloat(uint16_t val, uint16_t digits_mask, uint8_t digits_whole) 
 
 void video_WriteUInt8(uint8_t val) {
 	uint8_t mask = 100;
+	bool firstNotZerro = false;
 	while (true) {
-		video_Write('0' + val / mask);
+		uint8_t i = val / mask;
+		if (i != 0 || firstNotZerro || mask == 1) {
+			video_Write('0' + i);
+		}
+		if (i != 0) {
+			firstNotZerro = true;
+		}
 		val %= mask;
 		mask /= 10;
+		if (mask == 0) {
+			break;
+		}
 	}
 }
 

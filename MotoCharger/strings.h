@@ -13,6 +13,8 @@
 #define CHAR_UP			(32*4+16)
 #define CHAR_DOWN		(32*4+16+2)
 #define CHAR_UP_DOWN	(32*4+16+1)
+#define CHAR_SQ_BRACKET_LEFT	(10)
+#define CHAR_SQ_BRACKET_RIGHT	(32*6+1)
 
 #define def_str(id, eng)	const char PROGMEM STR_##id[] = eng;
 
@@ -40,10 +42,10 @@ PGM_P const STR_MAIN_MODES[] PROGMEM = {
 };
 
 PGM_P const STR_VALUES[] PROGMEM = {
-	STR_VAL_I_CHARGE,
-	STR_VAL_I_DISCHARGE,
 	STR_VAL_U_CHARGE,
 	STR_VAL_U_DISCHARGE,
+	STR_VAL_I_CHARGE,
+	STR_VAL_I_DISCHARGE,
 	STR_VAL_T_CHARGE,
 	STR_VAL_T_DISCHARGE,
 };

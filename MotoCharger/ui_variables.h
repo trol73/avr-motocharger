@@ -22,9 +22,11 @@
 
 #define __UI_VAR_COUNT					8
 
-uint16_t ui_vars[__UI_VAR_COUNT];
+#define UI_VARIABLES_COUNT				10	// сколько значений каждой переменной храним
 
+uint16_t ui_vars[__UI_VAR_COUNT][UI_VARIABLES_COUNT];		// значения переменных
 
+const uint16_t ui_vars_max_limits[] PROGMEM = {170, 130, 500, 100, 0x6000, 0x6000};
 
 /************************************************************************/
 /* Print a tie part: minutes or seconds. Two-digits number              */
@@ -33,9 +35,9 @@ void ui_PrintTimePart(uint8_t val) {
 	if (val < 10) {
 		video_Write('0');
 	} else {
-		video_Write(val / 10);
+		video_Write('0' + val / 10);
 	}
-	video_Write(val % 10);
+	video_Write('0' + val % 10);
 }
 
 /************************************************************************/
@@ -78,5 +80,12 @@ void ui_PrintVar(uint8_t varType, uint16_t val, bool unit) {
 	}
 }
 
+/************************************************************************/
+/* Возвращает максимально возможное значение переменной                 */
+/* (минимально допустимое значение для всех переменных - 1)             */
+/************************************************************************/
+uint16_t ui_GetMaxVarLimit(uint8_t varType) {
+	return pgm_read_word(&ui_vars_max_limits[varType]);
+}
 
 #endif /* UI_VARIABLES_H_ */
