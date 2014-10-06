@@ -62,6 +62,15 @@ void ui_Draw() {
 			break;
 		case SCREEN_DISCHARGING:
 			break;
+		case SCREEN_POWER_SUPPLY:
+			video_WriteStr(STR_POWER_SUPPLY);
+			video_GotoXY(0, 1);
+			video_WriteStr(STR_U_EQUAL);
+			ui_PrintVar(UI_VAR_U_CHARGE, hw_valU, true);
+			video_GotoXY(9, 1);
+			video_WriteStr(STR_I_EQUAL);
+			ui_PrintVar(UI_VAR_U_CHARGE, hw_valI, true);
+			break;
 		case SCREEN_DESULPHATION:
 			break;
 	}
@@ -91,13 +100,13 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 }
 
 
-const uint8_t ui_map_main_menu[] PROGMEM = {SCREEN_CHARGING, SCREEN_DISCHARGING, SCREEN_SETTINGS_MENU}; 
+const uint8_t ui_map_main_menu[] PROGMEM = {SCREEN_CHARGING, SCREEN_DISCHARGING, SCREEN_POWER_SUPPLY, SCREEN_SETTINGS_MENU}; 
 
 void ui_ProcessKeys() {
 	uint16_t max;
 	switch (ui_screen) {
 		case SCREEN_MAIN:
-			if (!ui_ProcessUpDownMenu(2)) {
+			if (!ui_ProcessUpDownMenu(3)) {
 				if (key_click_flag[KEY_ENTER]) {
 					ui_screen = pgm_read_byte(&ui_map_main_menu[ui_index]);
 				}
@@ -110,7 +119,7 @@ void ui_ProcessKeys() {
 					ui_varType = ui_index;
 					ui_index = 0;
 				} else if (key_click_flag[KEY_BACK]) {
-					ui_index = 2;	// settings
+					ui_index = 3;	// settings
 					ui_screen = SCREEN_MAIN;
 				}
 			}

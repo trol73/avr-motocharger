@@ -19,12 +19,14 @@
 #define def_str(id, eng, rus)	const char PROGMEM STR_##id[] = rus;
 
 const char PROGMEM STR_U_EQUAL[] = "U=";
+const char PROGMEM STR_I_EQUAL[] = "I=";
 // const char PROGMEM STR_CHARGE[] = "Charge";
 // const char PROGMEM STR_DISCHARGE[] = "Discharge";
 // const char PROGMEM STR_SETTINGS[] = "Settings";
 
 def_str(CHARGE, "Charge", "\xc8\x61\x70\xfa\xd6\xfb\x61")
 def_str(DISCHARGE, "Discharge", "\x50\x61\xd8\x70\xfa\xd6\xfb\x61")
+def_str(POWER_SUPPLY, "Power supply", "\xc4\xdb\x6f\xfb \xed\xd9\xfd\x61\xfc\xd9\xfa")
 def_str(SETTINGS, "Settings", "\x48\x61\x63\xfd\x70\x6f\xda\xfb\xd9")
 
 def_str(VAL_I_CHARGE, "I.charge", "I.\xd8\x61\x70")
@@ -39,6 +41,7 @@ def_str(VAL_T_DISCHARGE, "T.discharge", "T.\x70\x61\xd8\x70")
 PGM_P const STR_MAIN_MODES[] PROGMEM = {
 	STR_CHARGE,
 	STR_DISCHARGE,
+	STR_POWER_SUPPLY,
 	STR_SETTINGS,
 };
 

@@ -16,7 +16,8 @@
 #define SCREEN_SETTINGS_MENU			4	// Меню настроек - список параметров конфигурации
 #define SCREEN_CHARGING					5	// charging process screen
 #define SCREEN_DISCHARGING				6	// discharging process screen
-#define SCREEN_DESULPHATION				7	// desulphation process screen
+#define SCREEN_POWER_SUPPLY				7
+#define SCREEN_DESULPHATION				8	// desulphation process screen
 
 
 

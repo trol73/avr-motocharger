@@ -13,7 +13,7 @@
 
 #define HW_MEASSURE_COUNT		5	// по скольким измерени€м делать усреднение 
 
-bool hw_meassurePowerU = false;		// если этот флаг установлен, в фоновом режме будет выполн€тьс€ измерение напр€жени€ на выходе источника питани€
+bool hw_meassurePowerU;			// если этот флаг установлен, в фоновом режме будет выполн€тьс€ измерение напр€жени€ на выходе источника питани€
 
 uint16_t hw_valUsum;			// сюда суммируютс€ измеренные значени€ напр€жени€ на батарее
 uint16_t hw_valIsum;			// сюда суммируютс€ измеренные значени€ тока через батарею
@@ -24,6 +24,18 @@ uint8_t hw_valIcnt;				// количество выполненных измерений тока через батарею
 uint8_t hw_valUPowerCnt;		// количество выполненных измерений напр€жений на выходе источника питани€
 
 uint16_t hw_valU, hw_valI, hw_valUpower;	// тут хран€тс€ усредненные измеренные величины
+
+
+uint16_t hw_StartMeassure(uint8_t pin);
+
+void hw_Init() {
+	hw_valU = 0;
+	hw_valI = 0;
+	hw_valUpower = 0;
+	hw_meassurePowerU = false;
+	hw_StartMeassure(ADC_U_OUT);
+}
+
 
 /************************************************************************/
 /* ѕрерывание ј÷ѕ                                                       */
@@ -49,9 +61,9 @@ ISR(ADC_vect) {
 			if (hw_valIcnt >= HW_MEASSURE_COUNT) {
 				hw_valI = hw_valIsum / hw_valIcnt;
 				hw_valIsum = 0;
-				hw_valIcnt = 0;				
+				hw_valIcnt = 0;
 			}		
-			hw_StartMeassure(hw_meassurePowerU ? ADC_U_POWER : ADC_I_OUT);
+			hw_StartMeassure(hw_meassurePowerU ? ADC_U_POWER : ADC_U_OUT);
 			break;
 		case ADC_U_POWER:
 			hw_valUPowerSum += val;
@@ -69,8 +81,10 @@ ISR(ADC_vect) {
 	}
 }
 
+
 /************************************************************************/
-/*                                                                      */
+/* «апускает измерение на указанном канале                              */
+/*		pin: ADC_xxx константа                                          */
 /************************************************************************/
 uint16_t hw_StartMeassure(uint8_t pin) {
 	ADMUX = pin|_BV(REFS0)|_BV(REFS1);
@@ -81,8 +95,6 @@ uint16_t hw_StartMeassure(uint8_t pin) {
 	//		ADIE - разрешение прерывани€
 	//		ADPSx - делитель частоты = 128, врем€ преобразовани€ = 104 мк—
 }
-
-
 
 
 

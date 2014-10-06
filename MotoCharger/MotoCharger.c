@@ -22,12 +22,14 @@
 #include "keyboard.h"
 #include "ui_constants.h"
 #include "ui_variables.h"
+#include "hardware.h"
 #include "ui.h"
 
 
 static void init() {
 	DDRA = 0;
 	DDRB = 0;
+	PORTA = 0;
 	DDR(LED_DATA_PORT) = _BV(LED_PIN_GREEN) | _BV(LED_PIN_RED);
 	DDR(BEEPER_PORT) = _BV(BEEPER_PIN);
 }
@@ -45,6 +47,8 @@ int main(void) {
 	MSG("INIT");
 	
 	init();
+	hw_Init();
+	sei();	
 	
 	beep(false);
 
