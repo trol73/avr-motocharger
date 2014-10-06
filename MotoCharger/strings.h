@@ -16,23 +16,24 @@
 #define CHAR_SQ_BRACKET_LEFT	(10)
 #define CHAR_SQ_BRACKET_RIGHT	(32*6+1)
 
-#define def_str(id, eng)	const char PROGMEM STR_##id[] = eng;
+#define def_str(id, eng, rus)	const char PROGMEM STR_##id[] = rus;
 
 const char PROGMEM STR_U_EQUAL[] = "U=";
 // const char PROGMEM STR_CHARGE[] = "Charge";
 // const char PROGMEM STR_DISCHARGE[] = "Discharge";
 // const char PROGMEM STR_SETTINGS[] = "Settings";
 
-def_str(CHARGE, "Charge")
-def_str(DISCHARGE, "Discharge")
-def_str(SETTINGS, "Settings")
+def_str(CHARGE, "Charge", "\xc8\x61\x70\xfa\xd6\xfb\x61")
+def_str(DISCHARGE, "Discharge", "\x50\x61\xd8\x70\xfa\xd6\xfb\x61")
+def_str(SETTINGS, "Settings", "\x48\x61\x63\xfd\x70\x6f\xda\xfb\xd9")
 
-def_str(VAL_I_CHARGE, "I.charge")
-def_str(VAL_I_DISCHARGE, "I.discharge")
-def_str(VAL_U_CHARGE, "U.charge")
-def_str(VAL_U_DISCHARGE, "U.discharge")
-def_str(VAL_T_CHARGE, "T.charge")
-def_str(VAL_T_DISCHARGE, "T.discharge")
+def_str(VAL_I_CHARGE, "I.charge", "I.\xd8\x61\x70")
+def_str(VAL_I_DISCHARGE, "I.discharge", "I.\x70\x61\xd8\x70")
+def_str(VAL_U_CHARGE, "U.charge", "U.\xd8\x61\x70")
+def_str(VAL_U_DISCHARGE, "U.discharge", "U.\x70\x61\xd8\x70")
+def_str(VAL_T_CHARGE, "T.charge", "T.\xd8\x61\x70")
+def_str(VAL_T_DISCHARGE, "T.discharge", "T.\x70\x61\xd8\x70")
+
 
 
 PGM_P const STR_MAIN_MODES[] PROGMEM = {

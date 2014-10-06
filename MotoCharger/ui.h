@@ -65,7 +65,6 @@ void ui_Draw() {
 		case SCREEN_DESULPHATION:
 			break;
 	}
-	
 }
 
 

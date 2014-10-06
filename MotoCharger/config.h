@@ -17,3 +17,7 @@
 
 #define BEEPER_PORT				D
 #define BEEPER_PIN				6
+
+#define ADC_U_OUT				0		// вход АЦП для измерения выходного напряжения		
+#define ADC_I_OUT				1		// вход АЦП для измерения тока
+#define ADC_U_POWER				2		// вход АЦП для измерения выходного напряжения источника питания
