@@ -69,7 +69,7 @@ void ui_Draw() {
 			ui_PrintVar(UI_VAR_U_CHARGE, hw_valU, true);
 			video_GotoXY(9, 1);
 			video_WriteStr(STR_I_EQUAL);
-			ui_PrintVar(UI_VAR_U_CHARGE, hw_valI, true);
+			ui_PrintVar(UI_VAR_I_CHARGE, hw_valI, true);
 			break;
 		case SCREEN_DESULPHATION:
 			break;
@@ -100,6 +100,24 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 }
 
 
+void ui_SetScreen(uint8_t screen) {
+	ui_screen = screen;
+	switch (screen) {
+		case SCREEN_CHARGING:
+			hw_SetLed(LED_GREEN);
+			break;
+		case SCREEN_DISCHARGING:
+			hw_SetLed(LED_RED);
+			break;
+		case SCREEN_POWER_SUPPLY:
+			//hw_SetLed(LED_YELLOW);
+			break;
+		default:
+			hw_SetLed(LED_DISABLED);
+			break;
+	}
+}
+
 const uint8_t ui_map_main_menu[] PROGMEM = {SCREEN_CHARGING, SCREEN_DISCHARGING, SCREEN_POWER_SUPPLY, SCREEN_SETTINGS_MENU}; 
 
 void ui_ProcessKeys() {
@@ -108,19 +126,19 @@ void ui_ProcessKeys() {
 		case SCREEN_MAIN:
 			if (!ui_ProcessUpDownMenu(3)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_screen = pgm_read_byte(&ui_map_main_menu[ui_index]);
+					ui_SetScreen(pgm_read_byte(&ui_map_main_menu[ui_index]));
 				}
 			}
 			break;
 		case SCREEN_SETTINGS_MENU:
 			if (!ui_ProcessUpDownMenu(5)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_screen = SCREEN_SELECT_VALUE_FOR_EDIT;
+					ui_SetScreen(SCREEN_SELECT_VALUE_FOR_EDIT);
 					ui_varType = ui_index;
 					ui_index = 0;
 				} else if (key_click_flag[KEY_BACK]) {
 					ui_index = 3;	// settings
-					ui_screen = SCREEN_MAIN;
+					ui_SetScreen(SCREEN_MAIN);
 				}
 			}
 			break;
@@ -128,11 +146,11 @@ void ui_ProcessKeys() {
 		case SCREEN_SELECT_VALUE_FOR_EDIT:
 			if (!ui_ProcessUpDownMenu(UI_VARIABLES_COUNT-1)) {
 				if (key_click_flag[KEY_ENTER]) {
-					ui_screen = SCREEN_EDIT_VALUE;
+					ui_SetScreen(SCREEN_EDIT_VALUE);
 					ui_varIndex = ui_index;
 					ui_currentEditValue = ui_vars[ui_varType][ui_varIndex];
 				} else if (key_click_flag[KEY_BACK]) {
-					ui_screen = SCREEN_SETTINGS_MENU;
+					ui_SetScreen(SCREEN_SETTINGS_MENU);
 					ui_index = ui_varType;
 				}
 			}
@@ -149,13 +167,35 @@ void ui_ProcessKeys() {
 					ui_currentEditValue--;
 				}
 			} else if (key_click_flag[KEY_BACK]) {
-				ui_screen = SCREEN_SELECT_VALUE_FOR_EDIT;
 				ui_index = ui_varIndex;
+				ui_SetScreen(SCREEN_SELECT_VALUE_FOR_EDIT);
 			}
 			break;
+			
+		case SCREEN_POWER_SUPPLY:
+			if (key_click_flag[KEY_BACK]) {
+				ui_SetScreen(SCREEN_MAIN);
+			}
+			break;		
+			
+		case SCREEN_CHARGING:
+			if (key_click_flag[KEY_BACK]) {
+				ui_SetScreen(SCREEN_MAIN);
+			}
+			break;
+			
+		case SCREEN_DISCHARGING:
+			if (key_click_flag[KEY_BACK]) {
+				ui_SetScreen(SCREEN_MAIN);
+			}		
+			break;			
 
 	}
 }
 
+
+void ui_Init() {
+	ui_SetScreen(SCREEN_MAIN);
+}
 
 #endif /* UI_H_ */

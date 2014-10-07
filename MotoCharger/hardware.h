@@ -13,6 +13,12 @@
 
 #define HW_MEASSURE_COUNT		5	// по скольким измерениям делать усреднение 
 
+
+#define LED_RED					_BV(LED_PIN_RED)
+#define LED_GREEN				_BV(LED_PIN_GREEN)
+#define LED_YELLOW				(_BV(LED_PIN_RED) | _BV(LED_PIN_GREEN))
+#define LED_DISABLED			0
+
 bool hw_meassurePowerU;			// если этот флаг установлен, в фоновом режме будет выполняться измерение напряжения на выходе источника питания
 
 uint16_t hw_valUsum;			// сюда суммируются измеренные значения напряжения на батарее
@@ -34,6 +40,14 @@ void hw_Init() {
 	hw_valUpower = 0;
 	hw_meassurePowerU = false;
 	hw_StartMeassure(ADC_U_OUT);
+	
+	// устанавливаем 0 на выходах ШИМ
+	OCR1A = 0;
+	OCR1B = 0;
+	// конфигурация ШИМов
+	TCCR1A = _BV(WGM11) | _BV(WGM10) | _BV(COM1A1) | _BV(COM1B1);
+	TCCR1B = _BV(CS10);
+	// фазо-корректная ШИМ, 10 бит, делитель частоты отключен
 }
 
 
@@ -97,5 +111,25 @@ uint16_t hw_StartMeassure(uint8_t pin) {
 }
 
 
+/************************************************************************/
+/* Устанавливает значение на выводе ШИМ, регулирующим напряжение        */
+/************************************************************************/
+inline void hw_SetOutputU(uint16_t val) {
+	OCR1A = val;
+}
+
+
+/************************************************************************/
+/* Устанавливает значение на выводе ШИМ, регулирующим ток разряда       */
+/************************************************************************/
+inline void hw_SetOutputDischarge(uint16_t val) {
+	OCR1B = val;
+}
+
+
+inline void hw_SetLed(uint8_t val) {
+	PORT(LED_DATA_PORT)	&= ~(_BV(LED_PIN_RED) | _BV(LED_PIN_GREEN));
+	PORT(LED_DATA_PORT) |= val;
+}
 
 #endif /* HARDWARE_H_ */

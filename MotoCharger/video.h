@@ -12,12 +12,12 @@
 /************************************************************************/
 /* Video memory has 2 pages with 2x16 chars                             */
 /************************************************************************/
-char video_memory[2*16*2];
+volatile char video_memory[2*16*2];
 
 /************************************************************************/
 /* Offset of the current page data in video memory   (can be 0 or 32)   */
 /************************************************************************/
-uint8_t video_currentPageOffset;
+volatile uint8_t video_currentPageOffset;
 
 /************************************************************************/
 /* Current position on the screen (0..31)                               */
