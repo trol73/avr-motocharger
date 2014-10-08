@@ -66,10 +66,28 @@ void ui_Draw() {
 			video_WriteStr(STR_POWER_SUPPLY);
 			video_GotoXY(0, 1);
 			video_WriteStr(STR_U_EQUAL);
-			ui_PrintVar(UI_VAR_U_CHARGE, hw_valU, true);
+			if (ps_enable) {
+				hw_SetLed(ps_currentLimitMode ? LED_RED : LED_GREEN);
+			} else {
+				hw_SetLed(LED_DISABLED);
+			}
+			if (ui_index == 1) {
+				video_SetBlinking(true);
+				ui_PrintVar(UI_VAR_U_CHARGE, ui_currentEditValue, true);
+				video_SetBlinking(false);
+			} else {
+				ui_PrintVar(UI_VAR_U_CHARGE, ps_enable ? meassure_outU : ps_U, true);
+			}			
 			video_GotoXY(9, 1);
 			video_WriteStr(STR_I_EQUAL);
-			ui_PrintVar(UI_VAR_I_CHARGE, hw_valI, true);
+			if (ui_index == 2) {
+				video_SetBlinking(true);
+				ui_PrintVar(UI_VAR_I_CHARGE, ui_currentEditValue, true);
+				video_SetBlinking(false);
+			} else {
+				ui_PrintVar(UI_VAR_I_CHARGE, ps_enable ? meassure_outI : ps_maxI, true);
+			}			
+			
 			break;
 		case SCREEN_DESULPHATION:
 			break;
@@ -102,6 +120,8 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 
 void ui_SetScreen(uint8_t screen) {
 	ui_screen = screen;
+	video_SetBlinking(false);
+	ps_enable = false;	// при любом перемещении по экранам выключаем выход блока питания
 	switch (screen) {
 		case SCREEN_CHARGING:
 			hw_SetLed(LED_GREEN);
@@ -110,6 +130,7 @@ void ui_SetScreen(uint8_t screen) {
 			hw_SetLed(LED_RED);
 			break;
 		case SCREEN_POWER_SUPPLY:
+			ui_index = 0;
 			//hw_SetLed(LED_YELLOW);
 			break;
 		default:
@@ -157,8 +178,8 @@ void ui_ProcessKeys() {
 			break;
 			
 		case SCREEN_EDIT_VALUE:
-			max = ui_GetMaxVarLimit(ui_varType);
 			if (key_click_flag[KEY_UP] || key_is_repeated(KEY_UP)) {
+				max = ui_GetMaxVarLimit(ui_varType);
 				if (ui_currentEditValue < max) {
 					ui_currentEditValue++;
 				}
@@ -173,8 +194,54 @@ void ui_ProcessKeys() {
 			break;
 			
 		case SCREEN_POWER_SUPPLY:
-			if (key_click_flag[KEY_BACK]) {
-				ui_SetScreen(SCREEN_MAIN);
+			switch(ui_index) {
+				case 0:	// режим просмотра
+					if (key_click_flag[KEY_BACK]) {
+						ui_SetScreen(SCREEN_MAIN);
+					} else if (key_click_flag[KEY_ENTER]) {
+						ps_enable = !ps_enable;
+					} else if (key_click_flag[KEY_UP]) {
+						ui_index = 2;	// режим редактирования тока
+						ui_currentEditValue = ps_maxI;
+					} else if (key_click_flag[KEY_DOWN]) {
+						ui_index = 1;	// режим редактирования напряжения
+						ui_currentEditValue = ps_U;
+					}
+					break;
+				case 1:	// режим редактирования напряжения
+					if (key_click_flag[KEY_BACK]) {
+						ui_index = 0;
+					} else if (key_click_flag[KEY_ENTER]) {
+						ps_U = ui_currentEditValue;
+						ui_index = 0;
+					} else if (key_click_flag[KEY_UP] || key_is_repeated(KEY_UP)) {
+						max = ui_GetMaxVarLimit(UI_VAR_U_CHARGE);
+						if (ui_currentEditValue < max) {
+							ui_currentEditValue++;
+						}
+					} else if (key_click_flag[KEY_DOWN] || key_is_repeated(KEY_DOWN)) {
+						if (ui_currentEditValue > 1) {
+							ui_currentEditValue--;
+						}
+					}
+					break;
+				case 2: // режим редактирования тока
+					if (key_click_flag[KEY_BACK]) {
+						ui_index = 0;
+					} else if (key_click_flag[KEY_ENTER]) {
+						ps_maxI = ui_currentEditValue;
+						ui_index = 0;
+					} else if (key_click_flag[KEY_UP] || key_is_repeated(KEY_UP)) {
+						max = ui_GetMaxVarLimit(UI_VAR_I_CHARGE);
+						if (ui_currentEditValue < max) {
+							ui_currentEditValue++;
+						}
+					} else if (key_click_flag[KEY_DOWN] || key_is_repeated(KEY_DOWN)) {
+						if (ui_currentEditValue > 1) {
+							ui_currentEditValue--;
+						}
+					}
+					break;
 			}
 			break;		
 			

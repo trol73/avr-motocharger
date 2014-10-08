@@ -107,13 +107,22 @@
     <Compile Include="display.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="hardware.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="i2c.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="keyboard.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="meassure.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MotoCharger.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="power_supply.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="screens.h">

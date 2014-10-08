@@ -34,11 +34,16 @@ uint16_t hw_valU, hw_valI, hw_valUpower;	// тут хран€тс€ усредненные измеренные 
 
 uint16_t hw_StartMeassure(uint8_t pin);
 
+// когда ј÷ѕ завершает очередное измерение, он устанавливает соответствующий бит (номер которого определ€етс€ константами ADC_xxx) в этой переменной
+// главный поток производит пересчет измеренных величин в размерности тока и напр€жени€ и очищает биты
+volatile uint8_t hw_dataAvailFlags;
+
 void hw_Init() {
 	hw_valU = 0;
 	hw_valI = 0;
 	hw_valUpower = 0;
 	hw_meassurePowerU = false;
+	hw_dataAvailFlags = 0;
 	hw_StartMeassure(ADC_U_OUT);
 	
 	// устанавливаем 0 на выходах Ў»ћ
@@ -64,6 +69,7 @@ ISR(ADC_vect) {
 			hw_valUcnt++;
 			if (hw_valUcnt >= HW_MEASSURE_COUNT) {
 				hw_valU = hw_valUsum / hw_valUcnt;
+				hw_dataAvailFlags |= _BV(ADC_U_OUT);
 				hw_valUsum = 0;
 				hw_valUcnt = 0;
 			}
@@ -74,6 +80,7 @@ ISR(ADC_vect) {
 			hw_valIcnt++;
 			if (hw_valIcnt >= HW_MEASSURE_COUNT) {
 				hw_valI = hw_valIsum / hw_valIcnt;
+				hw_dataAvailFlags |= _BV(ADC_I_OUT);
 				hw_valIsum = 0;
 				hw_valIcnt = 0;
 			}		
@@ -84,6 +91,7 @@ ISR(ADC_vect) {
 			hw_valUPowerCnt++;
 			if (hw_valUPowerCnt >= HW_MEASSURE_COUNT) {
 				hw_valUpower = hw_valUPowerSum / hw_valUPowerCnt;
+				hw_dataAvailFlags |= _BV(ADC_U_POWER);
 				hw_valUPowerSum = 0;
 				hw_valUPowerCnt = 0;
 			}

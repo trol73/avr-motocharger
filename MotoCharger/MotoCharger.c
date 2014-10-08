@@ -23,6 +23,8 @@
 #include "ui_constants.h"
 #include "ui_variables.h"
 #include "hardware.h"
+#include "power_supply.h"
+#include "meassure.h"
 #include "ui.h"
 
 #define F_TIMER			125		// частота таймер на основе ТС1 на основе которого работают часы и обновление клавиатуры и экрана
@@ -66,21 +68,17 @@ void beep(bool enable)  {
 /* Используется для формирования временных интервалов кратных 1 сек,    */
 /* а также для обновления состояния клавиатуры и обновления экрана      */
 /************************************************************************/
+
 ISR(TIMER0_COMP_vect) {
 	OCR0 += tc0_delta_count;
 	time_hsec++;
 	
-	
-	uint8_t hsec5 = time_hsec % 5; 
-	if (hsec5 == 1) {
-		// опрашиваем клавиатуру с частотой 25Гц
-		keyboardCheck();
-		ui_ProcessKeys();
-	} else if (hsec5 == 3) {
-		// обновляем экран с частотой 25Гц
-		ui_Draw();
-		video_Repaint();
+	static uint8_t blinkingCounter = 0;
+	if (++blinkingCounter > 50) {
+		blinkingCounter = 0;
 	}
+	video_blinkingState = blinkingCounter < 25;	// обновляем состояние мерцания для видеоподсистемы
+
 	
 	if (time_hsec >= F_TIMER) {
 		time_hsec = 0;
@@ -122,7 +120,54 @@ int main(void) {
 	meassuredU = 125;
 
 	while (true) {
-		_delay_ms(100);
+		// примерно 20 раз в секунду опрашиваем клавиатуру и обновляем экраан
+		keyboardCheck();
+		ui_ProcessKeys();
+		
+		// если есть готовые данные от АЦП, то вычисляем напряжения и токи
+		if (hw_dataAvailFlags & _BV(ADC_U_OUT)) {
+			hw_dataAvailFlags &= ~_BV(ADC_U_OUT);
+			// дважды смотрим показания АЦП и сверяем для избежания искажения в случае вызова в этот момент обработчика прерывания
+			uint16_t val;
+			while (true) {
+				val = hw_valU;
+				uint16_t v2 = hw_valU;
+				if (val == v2) {
+					break;
+				}
+			}			
+			meassure_calcOutU(val);
+		}
+		if (hw_dataAvailFlags & _BV(ADC_I_OUT)) {
+			hw_dataAvailFlags &= ~_BV(ADC_I_OUT);
+			// дважды смотрим показания АЦП и сверяем для избежания искажения в случае вызова в этот момент обработчика прерывания
+			uint16_t val;
+			while (true) {
+				val = hw_valI;
+				uint16_t v2 = hw_valI;
+				if (val == v2) {
+					break;
+				}
+			}
+			meassure_calcOutI(val);
+		}
+		if (hw_dataAvailFlags & _BV(ADC_U_POWER)) {
+			hw_dataAvailFlags &= ~_BV(ADC_U_POWER);
+			// дважды смотрим показания АЦП и сверяем для избежания искажения в случае вызова в этот момент обработчика прерывания
+			uint16_t val;
+			while (true) {
+				val = hw_valUpower;
+				uint16_t v2 = hw_valUpower;
+				if (val == v2) {
+					break;
+				}
+			}			
+			meassure_calcPowerU(val);
+		}
+		
+		ui_Draw();
+		video_Repaint();
+		_delay_ms(50);
 	}
 
 }
