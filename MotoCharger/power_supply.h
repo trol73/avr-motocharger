@@ -21,6 +21,15 @@ uint16_t ps_U;
 // установленное ограничение тока на выходе блока питания
 uint16_t ps_maxI;
 
+uint16_t ps_ConvertVoltageToPwm(uint16_t volts) {
+	return volts*5;	// TODO
+}
+
+
+void ps_Enable(bool enable) {
+	ps_enable = enable;
+	hw_SetOutputU(enable ? ps_ConvertVoltageToPwm(ps_U) : 0);
+}
 
 
 #endif /* POWER_SUPPLY_H_ */

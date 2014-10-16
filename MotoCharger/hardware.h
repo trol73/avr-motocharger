@@ -21,15 +21,8 @@
 
 bool hw_meassurePowerU;			// если этот флаг установлен, в фоновом режме будет выполняться измерение напряжения на выходе источника питания
 
-uint16_t hw_valUsum;			// сюда суммируются измеренные значения напряжения на батарее
-uint16_t hw_valIsum;			// сюда суммируются измеренные значения тока через батарею
-uint16_t hw_valUPowerSum;		// сюда суммируются измеренные значения напряжения на выходе источника питания
 
-uint8_t hw_valUcnt;				// количество выполненных измерений напряжений на батареи
-uint8_t hw_valIcnt;				// количество выполненных измерений тока через батарею
-uint8_t hw_valUPowerCnt;		// количество выполненных измерений напряжений на выходе источника питания
-
-uint16_t hw_valU, hw_valI, hw_valUpower;	// тут хранятся усредненные измеренные величины
+volatile uint16_t hw_valU, hw_valI, hw_valUpower;	// тут хранятся усредненные измеренные величины
 
 
 uint16_t hw_StartMeassure(uint8_t pin);
@@ -62,38 +55,41 @@ void hw_Init() {
 ISR(ADC_vect) {
 	uint8_t admux = ADMUX & 0b00011111;
 	uint16_t val = ADC;
+	
+	static uint16_t sumU, sumI, sumPower;	// сюда суммируются измеренные значения
+	static uint8_t cntU, cntI, cntPower;	// количество выполненных измерений
 
 	switch (admux) {
-		case ADC_U_OUT:
-			hw_valUsum += val;
-			hw_valUcnt++;
-			if (hw_valUcnt >= HW_MEASSURE_COUNT) {
-				hw_valU = hw_valUsum / hw_valUcnt;
+		case _BV(ADC_U_OUT):
+			sumU += val;
+			cntU++;
+			if (cntU >= HW_MEASSURE_COUNT) {
+				hw_valU = sumU / cntU;
 				hw_dataAvailFlags |= _BV(ADC_U_OUT);
-				hw_valUsum = 0;
-				hw_valUcnt = 0;
+				sumU = 0;
+				cntU = 0;
 			}
 			hw_StartMeassure(ADC_I_OUT);
 			break;
-		case ADC_I_OUT:
-			hw_valIsum += val;
-			hw_valIcnt++;
-			if (hw_valIcnt >= HW_MEASSURE_COUNT) {
-				hw_valI = hw_valIsum / hw_valIcnt;
+		case _BV(ADC_I_OUT):
+			sumI += val;
+			cntI++;
+			if (cntI >= HW_MEASSURE_COUNT) {
+				hw_valI = sumI / cntI;
 				hw_dataAvailFlags |= _BV(ADC_I_OUT);
-				hw_valIsum = 0;
-				hw_valIcnt = 0;
+				sumI = 0;
+				cntI = 0;
 			}		
 			hw_StartMeassure(hw_meassurePowerU ? ADC_U_POWER : ADC_U_OUT);
 			break;
-		case ADC_U_POWER:
-			hw_valUPowerSum += val;
-			hw_valUPowerCnt++;
-			if (hw_valUPowerCnt >= HW_MEASSURE_COUNT) {
-				hw_valUpower = hw_valUPowerSum / hw_valUPowerCnt;
+		case _BV(ADC_U_POWER):
+			sumPower += val;
+			cntPower++;
+			if (cntPower >= HW_MEASSURE_COUNT) {
+				hw_valUpower = sumPower / cntPower;
 				hw_dataAvailFlags |= _BV(ADC_U_POWER);
-				hw_valUPowerSum = 0;
-				hw_valUPowerCnt = 0;
+				sumPower = 0;
+				cntPower = 0;
 			}
 			hw_StartMeassure(ADC_U_OUT);
 			break;
@@ -109,7 +105,7 @@ ISR(ADC_vect) {
 /*		pin: ADC_xxx константа                                          */
 /************************************************************************/
 uint16_t hw_StartMeassure(uint8_t pin) {
-	ADMUX = pin|_BV(REFS0)|_BV(REFS1);
+	ADMUX = _BV(pin)|_BV(REFS0)|_BV(REFS1);
 	//		REFSx - опорный источник 2.56В
 	ADCSRA = _BV(ADEN)|_BV(ADSC)|_BV(ADIE)|_BV(ADPS2)|_BV(ADPS1)|_BV(ADPS0);
 	//		ADEN - включение АЦП

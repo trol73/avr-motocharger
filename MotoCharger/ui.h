@@ -200,6 +200,7 @@ void ui_ProcessKeys() {
 						ui_SetScreen(SCREEN_MAIN);
 					} else if (key_click_flag[KEY_ENTER]) {
 						ps_enable = !ps_enable;
+						ps_Enable(ps_enable);
 					} else if (key_click_flag[KEY_UP]) {
 						ui_index = 2;	// режим редактирования тока
 						ui_currentEditValue = ps_maxI;

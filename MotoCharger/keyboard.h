@@ -15,19 +15,56 @@
 #define KEY_BACK		3
 #define KEY_UP_OR_DOWN	4
 
-#define KEY_CLICK_MIN	10	// минимальное количество тактов удержания кнопки для засчитывания клика по ней (после отпускания)
+#define KEY_MIN_PRESS_DURATION		10	// минимальное количество тактов удержания кнопки для засчитывания клика по ней (после отпускания)
+#define KEY_MIN_RELEASE_DURATION	5
 
 uint8_t key_pressed_counter[4];				// счетчики удержания клавиш. содержат время удержания клавиши, 1 единица соответствует примерно 0.05 сек (0 - если клавиша отпущена)
 uint8_t key_release_counter[4];				// счетчик отпускания клавиши. содержат время отпускания клавиши, 1 единица соответствует примерно 0.05 сек (0 - если клавиша нажата)
 bool key_click_flag[5];						// флаги того, что клавиша была нажата и отпущена
 uint8_t key_up_minus_down;					// разность (key_click_flag[KEY_UP] - key_click_flag[KEY_DOWN])
+uint8_t key_repeated_counter;
+	
 
-
+void key_check_key(uint8_t index, bool pressed) {
+	key_click_flag[index] = false;
+	if (pressed) {
+		if (key_pressed_counter[index] < 0xff) {
+			key_pressed_counter[index]++;
+		}
+		if (key_pressed_counter[index] == KEY_MIN_PRESS_DURATION) {
+			key_release_counter[index] = 0;
+		}
+		if (key_release_counter[index] > 0) {
+			key_release_counter[index]--;
+		}
+	} else {
+		if (key_pressed_counter[index] >= KEY_MIN_PRESS_DURATION) {
+			if (key_release_counter[index] < 0xff) {
+				key_release_counter[index]++;
+			}
+			if (key_release_counter[index] >= KEY_MIN_RELEASE_DURATION) {
+				key_click_flag[index] = true;
+				key_pressed_counter[index] = 0;
+			}
+		} else {
+			if (key_pressed_counter[index] > 0) {
+				key_pressed_counter[index]--;
+			}
+		}
+	}	
+}
 /**
  *
  */
-inline bool key_is_repeated(uint8_t key) {
-	return key_pressed_counter[key] > 50;//15;
+bool key_is_repeated(uint8_t key) {
+	if (key_pressed_counter[key] > 200) {
+		return key_repeated_counter % 10 == 0;
+	} else if (key_pressed_counter[key] > 100) {
+		return key_repeated_counter % 20 == 0;
+	} else if (key_pressed_counter[key] > 50) {
+		return key_repeated_counter % 40 == 0;
+	}
+	return false;
 }
 
 
@@ -42,17 +79,30 @@ static inline void keyboardCheck() {
 	DDR(KEYBOARD_DATA_PORT) &= ~(_BV(KEYBOARD_PIN_ENTER) | _BV(KEYBOARD_PIN_BACK) | _BV(KEYBOARD_PIN_UP) | _BV(KEYBOARD_PIN_DOWN));
 	// enable pull-up
 	PORT(KEYBOARD_DATA_PORT) |= _BV(KEYBOARD_PIN_ENTER) | _BV(KEYBOARD_PIN_BACK) | _BV(KEYBOARD_PIN_UP) | _BV(KEYBOARD_PIN_DOWN);
-
+	
+	key_repeated_counter++;
+	
+	key_check_key(KEY_UP, !(PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_UP)));
+	key_check_key(KEY_DOWN, !(PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_DOWN)));
+	key_check_key(KEY_ENTER, !(PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_ENTER)));
+	key_check_key(KEY_BACK, !(PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_BACK)));
+/*
 	key_click_flag[KEY_UP] = false;
 	if (PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_UP)) {		// кнопка UP отпущена
 		if (key_pressed_counter[KEY_UP] >= KEY_CLICK_MIN) {
-			key_click_flag[KEY_UP] = true;
+			key_release_counter[KEY_UP] = KEY_RELEASE_MIN;
+			//key_click_flag[KEY_UP] = true;
+		} else if (key_release_counter[KEY_UP] > 0) {
+			if (--key_release_counter[KEY_UP] == 0) {
+				key_click_flag[KEY_UP] = true;
+			}
 		}
 		key_pressed_counter[KEY_UP] = 0;
 	} else {													// кнопка UP нажата
 		if (key_pressed_counter[KEY_UP] != 0xff) {
 			key_pressed_counter[KEY_UP]++;
 		}
+		key_release_counter[KEY_UP] = 0;
 	}
 
 	key_click_flag[KEY_DOWN] = false;
@@ -69,16 +119,29 @@ static inline void keyboardCheck() {
 
 	key_click_flag[KEY_ENTER] = false;
 	if (PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_ENTER)) {	// кнопка ENTER отпущена
-		if ( key_pressed_counter[KEY_ENTER] >= KEY_CLICK_MIN) {
-			key_click_flag[KEY_ENTER] = true;
+// 		if ( key_pressed_counter[KEY_ENTER] >= KEY_CLICK_MIN) {
+// 			key_click_flag[KEY_ENTER] = true;
+// 		}
+// 		key_pressed_counter[KEY_ENTER] = 0;
+// 	} else {													// кнопка ENTER нажата
+// 		if (key_pressed_counter[KEY_ENTER] != 0xff) {
+// 			key_pressed_counter[KEY_ENTER]++;
+// 		}
+		if (key_pressed_counter[KEY_ENTER] >= KEY_CLICK_MIN) {
+			key_release_counter[KEY_ENTER] = KEY_RELEASE_MIN;
+		} else if (key_release_counter[KEY_ENTER] > 0) {
+			if (--key_release_counter[KEY_ENTER] == 0) {
+				key_click_flag[KEY_ENTER] = true;
+			}
 		}
 		key_pressed_counter[KEY_ENTER] = 0;
 	} else {													// кнопка ENTER нажата
 		if (key_pressed_counter[KEY_ENTER] != 0xff) {
 			key_pressed_counter[KEY_ENTER]++;
 		}
+		key_release_counter[KEY_ENTER] = 0;
 	}
-
+	
 	key_click_flag[KEY_BACK] = false;
 	if (PIN(KEYBOARD_DATA_PORT) & _BV(KEYBOARD_PIN_BACK)) {		// кнопка BACK отпущена
 		if (key_pressed_counter[KEY_BACK] >= KEY_CLICK_MIN) {
@@ -100,7 +163,8 @@ static inline void keyboardCheck() {
 	if ( key_is_repeated(KEY_DOWN) || key_click_flag[KEY_DOWN] ) {
 		key_up_minus_down--;
 	}
-
+*/
+	
 #if ENABLE_LCD_HIGHLIGHT
 #endif
 }

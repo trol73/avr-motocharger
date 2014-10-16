@@ -22,6 +22,12 @@
 #include "keyboard.h"
 #include "ui_constants.h"
 #include "ui_variables.h"
+// счетчики текущего времени
+uint8_t time_hsec;	// считает 1/125 доли секунды
+uint8_t time_sec;
+uint8_t time_min;
+uint8_t time_hour;
+
 #include "hardware.h"
 #include "power_supply.h"
 #include "meassure.h"
@@ -32,11 +38,6 @@
 
 uint8_t tc0_delta_count;	// используется для генерации прерывания с частотой 125 Гц
 
-// счетчики текущего времени
-uint8_t time_hsec;	// считает 1/125 доли секунды
-uint8_t time_sec;
-uint8_t time_min;
-uint8_t time_hour;
 
 static void init() {
 	DDRA = 0;
@@ -120,7 +121,7 @@ int main(void) {
 	meassuredU = 125;
 
 	while (true) {
-		// примерно 20 раз в секунду опрашиваем клавиатуру и обновляем экраан
+		// примерно 20 раз в секунду опрашиваем клавиатуру и обновляем экран
 		keyboardCheck();
 		ui_ProcessKeys();
 		
@@ -135,7 +136,10 @@ int main(void) {
 				if (val == v2) {
 					break;
 				}
-			}			
+				MSG("u!");
+			}
+if (time_sec == 15)			
+MSG_DEC("U ", hw_valU);			
 			meassure_calcOutU(val);
 		}
 		if (hw_dataAvailFlags & _BV(ADC_I_OUT)) {
@@ -148,7 +152,10 @@ int main(void) {
 				if (val == v2) {
 					break;
 				}
+				MSG("i!");
 			}
+if (time_sec == 25)
+MSG_DEC("I ", hw_valI);			
 			meassure_calcOutI(val);
 		}
 		if (hw_dataAvailFlags & _BV(ADC_U_POWER)) {
@@ -161,13 +168,15 @@ int main(void) {
 				if (val == v2) {
 					break;
 				}
-			}			
+			}
+// if (time_sec == 45)
+// MSG_DEC("P ", val);			
 			meassure_calcPowerU(val);
 		}
 		
 		ui_Draw();
 		video_Repaint();
-		_delay_ms(50);
+		_delay_ms(10);
 	}
 
 }
