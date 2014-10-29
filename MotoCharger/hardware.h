@@ -11,7 +11,8 @@
 #ifndef HARDWARE_H_
 #define HARDWARE_H_
 
-#define HW_MEASSURE_COUNT		5	// по скольким измерени€м делать усреднение 
+#define HW_MEASSURE_COUNT		30	// по скольким измерени€м делать усреднение 
+
 
 
 #define LED_RED					_BV(LED_PIN_RED)
@@ -35,7 +36,7 @@ void hw_Init() {
 	hw_valU = 0;
 	hw_valI = 0;
 	hw_valUpower = 0;
-	hw_meassurePowerU = false;
+	hw_meassurePowerU = true;
 	hw_dataAvailFlags = 0;
 	hw_StartMeassure(ADC_U_OUT);
 	
@@ -60,7 +61,7 @@ ISR(ADC_vect) {
 	static uint8_t cntU, cntI, cntPower;	// количество выполненных измерений
 
 	switch (admux) {
-		case _BV(ADC_U_OUT):
+		case ADC_U_OUT:
 			sumU += val;
 			cntU++;
 			if (cntU >= HW_MEASSURE_COUNT) {
@@ -71,7 +72,7 @@ ISR(ADC_vect) {
 			}
 			hw_StartMeassure(ADC_I_OUT);
 			break;
-		case _BV(ADC_I_OUT):
+		case ADC_I_OUT:
 			sumI += val;
 			cntI++;
 			if (cntI >= HW_MEASSURE_COUNT) {
@@ -82,7 +83,7 @@ ISR(ADC_vect) {
 			}		
 			hw_StartMeassure(hw_meassurePowerU ? ADC_U_POWER : ADC_U_OUT);
 			break;
-		case _BV(ADC_U_POWER):
+		case ADC_U_POWER:
 			sumPower += val;
 			cntPower++;
 			if (cntPower >= HW_MEASSURE_COUNT) {
@@ -105,8 +106,8 @@ ISR(ADC_vect) {
 /*		pin: ADC_xxx константа                                          */
 /************************************************************************/
 uint16_t hw_StartMeassure(uint8_t pin) {
-	ADMUX = _BV(pin)|_BV(REFS0)|_BV(REFS1);
-	//		REFSx - опорный источник 2.56¬
+	ADMUX = pin|_BV(REFS0);
+	//		REFSx - опорный источник 5.0¬ (источник питани€)
 	ADCSRA = _BV(ADEN)|_BV(ADSC)|_BV(ADIE)|_BV(ADPS2)|_BV(ADPS1)|_BV(ADPS0);
 	//		ADEN - включение ј÷ѕ
 	//		ADSC - пуск измерени€

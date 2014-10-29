@@ -18,8 +18,14 @@ uint8_t ui_varIndex;	// номер текущей редактируемой переменной в списке
 uint16_t ui_currentEditValue;	// тут хранится текущее значение переменной в процессе ее редактирования
 uint16_t meassuredU = 125;
 
+bool ui_beeperEnabled = true;	// если установлен, то писк клавишь включен
+volatile uint8_t ui_beepCounter;	// длитекльность текущего сигнала биппера в 1/125 долях секунды (0 - если писк не воспроизводится в данный момент)
 
-
+void ui_Beep() {
+	if (ui_beeperEnabled) {
+		ui_beepCounter = 3;
+	}
+}
 
 void ui_Draw() {
 	video_Clear();
@@ -104,6 +110,7 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 		if (ui_index > max) {
 			ui_index = 0;
 		}
+		ui_Beep();
 		return true;
 	} 
 	if (key_click_flag[KEY_DOWN]) {
@@ -112,6 +119,7 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 		} else {
 			ui_index--;
 		}
+		ui_Beep();
 		return true;
 	}
 	return false;
@@ -121,6 +129,7 @@ bool ui_ProcessUpDownMenu(uint8_t max) {
 void ui_SetScreen(uint8_t screen) {
 	ui_screen = screen;
 	video_SetBlinking(false);
+	ui_Beep();
 	ps_enable = false;	// при любом перемещении по экранам выключаем выход блока питания
 	switch (screen) {
 		case SCREEN_CHARGING:
@@ -201,6 +210,7 @@ void ui_ProcessKeys() {
 					} else if (key_click_flag[KEY_ENTER]) {
 						ps_enable = !ps_enable;
 						ps_Enable(ps_enable);
+						ui_Beep();
 					} else if (key_click_flag[KEY_UP]) {
 						ui_index = 2;	// режим редактирования тока
 						ui_currentEditValue = ps_maxI;
@@ -214,6 +224,10 @@ void ui_ProcessKeys() {
 						ui_index = 0;
 					} else if (key_click_flag[KEY_ENTER]) {
 						ps_U = ui_currentEditValue;
+						// устанавливаем новое напряжение на выходе, если выход включен
+						if (ps_enable) {
+							ps_Enable(true);
+						}
 						ui_index = 0;
 					} else if (key_click_flag[KEY_UP] || key_is_repeated(KEY_UP)) {
 						max = ui_GetMaxVarLimit(UI_VAR_U_CHARGE);

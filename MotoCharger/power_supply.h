@@ -22,11 +22,14 @@ uint16_t ps_U;
 uint16_t ps_maxI;
 
 uint16_t ps_ConvertVoltageToPwm(uint16_t volts) {
-	return volts*5;	// TODO
+	return volts * 5;
 }
 
 
 void ps_Enable(bool enable) {
+	if (ps_enable != enable) {
+		MSG("PS");
+	}
 	ps_enable = enable;
 	hw_SetOutputU(enable ? ps_ConvertVoltageToPwm(ps_U) : 0);
 }

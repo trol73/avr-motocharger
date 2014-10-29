@@ -128,6 +128,9 @@
     <Compile Include="screens.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="settings.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="stddef.h">
       <SubType>compile</SubType>
     </Compile>

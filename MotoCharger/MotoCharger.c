@@ -5,12 +5,16 @@
  *  Author: Trol
  */ 
 
+#include "config.h"
 
 #include <avr/io.h>
-#include <stdlib.h>
-#include <stdbool.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
+#include <avr/eeprom.h>
+
+#include <stdlib.h>
+#include <stdbool.h>
+
 #include <util/delay.h>
 
 #include "i2c.h"
@@ -22,15 +26,17 @@
 #include "keyboard.h"
 #include "ui_constants.h"
 #include "ui_variables.h"
+
 // счетчики текущего времени
-uint8_t time_hsec;	// считает 1/125 доли секунды
-uint8_t time_sec;
-uint8_t time_min;
-uint8_t time_hour;
+volatile uint8_t time_hsec;	// считает 1/125 доли секунды
+volatile uint8_t time_sec;
+volatile uint8_t time_min;
+volatile uint8_t time_hour;
 
 #include "hardware.h"
 #include "power_supply.h"
 #include "meassure.h"
+#include "settings.h"
 #include "ui.h"
 
 #define F_TIMER			125		// частота таймер на основе ТС1 на основе которого работают часы и обновление клавиатуры и экрана
@@ -79,7 +85,9 @@ ISR(TIMER0_COMP_vect) {
 		blinkingCounter = 0;
 	}
 	video_blinkingState = blinkingCounter < 25;	// обновляем состояние мерцания для видеоподсистемы
-
+	if (ui_beepCounter != 0) {
+		ui_beepCounter--;
+	}
 	
 	if (time_hsec >= F_TIMER) {
 		time_hsec = 0;
@@ -115,7 +123,9 @@ int main(void) {
 	LCD_Contrast(0xff);
 	video_Reset();
 	ui_Init();
+	settings_Load();
 
+	meassure_CalibrateU();
 
 	ui_screen = SCREEN_MAIN;
 	meassuredU = 125;
@@ -138,11 +148,9 @@ int main(void) {
 				}
 				MSG("u!");
 			}
-if (time_sec == 15)			
-MSG_DEC("U ", hw_valU);			
 			meassure_calcOutU(val);
 		}
-		if (hw_dataAvailFlags & _BV(ADC_I_OUT)) {
+		if (hw_dataAvailFlags & _BV(ADC_I_OUT)) {                                                                                        
 			hw_dataAvailFlags &= ~_BV(ADC_I_OUT);
 			// дважды смотрим показания АЦП и сверяем для избежания искажения в случае вызова в этот момент обработчика прерывания
 			uint16_t val;
@@ -154,8 +162,6 @@ MSG_DEC("U ", hw_valU);
 				}
 				MSG("i!");
 			}
-if (time_sec == 25)
-MSG_DEC("I ", hw_valI);			
 			meassure_calcOutI(val);
 		}
 		if (hw_dataAvailFlags & _BV(ADC_U_POWER)) {
@@ -169,14 +175,13 @@ MSG_DEC("I ", hw_valI);
 					break;
 				}
 			}
-// if (time_sec == 45)
-// MSG_DEC("P ", val);			
 			meassure_calcPowerU(val);
 		}
 		
 		ui_Draw();
 		video_Repaint();
-		_delay_ms(10);
+		beep(ui_beepCounter);
+		_delay_ms(1);
 	}
 
 }

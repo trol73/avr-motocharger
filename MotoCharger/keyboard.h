@@ -15,8 +15,8 @@
 #define KEY_BACK		3
 #define KEY_UP_OR_DOWN	4
 
-#define KEY_MIN_PRESS_DURATION		10	// минимальное количество тактов удержания кнопки для засчитывания клика по ней (после отпускания)
-#define KEY_MIN_RELEASE_DURATION	5
+#define KEY_MIN_PRESS_DURATION		30	// минимальное количество тактов удержания кнопки для засчитывания клика по ней (после отпускания)
+#define KEY_MIN_RELEASE_DURATION	60
 
 uint8_t key_pressed_counter[4];				// счетчики удержания клавиш. содержат время удержания клавиши, 1 единица соответствует примерно 0.05 сек (0 - если клавиша отпущена)
 uint8_t key_release_counter[4];				// счетчик отпускания клавиши. содержат время отпускания клавиши, 1 единица соответствует примерно 0.05 сек (0 - если клавиша нажата)
@@ -57,12 +57,12 @@ void key_check_key(uint8_t index, bool pressed) {
  *
  */
 bool key_is_repeated(uint8_t key) {
-	if (key_pressed_counter[key] > 200) {
-		return key_repeated_counter % 10 == 0;
-	} else if (key_pressed_counter[key] > 100) {
-		return key_repeated_counter % 20 == 0;
-	} else if (key_pressed_counter[key] > 50) {
-		return key_repeated_counter % 40 == 0;
+	if (key_pressed_counter[key] > 250) {
+		return key_repeated_counter % 50 == 0;
+	} else if (key_pressed_counter[key] > 200) {
+		return key_repeated_counter % 150 == 0;
+	} else if (key_pressed_counter[key] > 150) {
+		return key_repeated_counter % 250 == 0;
 	}
 	return false;
 }
